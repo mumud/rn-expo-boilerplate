@@ -1,7 +1,12 @@
 import "~/global.css";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { DefaultTheme, Theme, ThemeProvider } from "@react-navigation/native";
+import {
+  DefaultTheme,
+  StackActions,
+  Theme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
@@ -9,6 +14,7 @@ import { Platform } from "react-native";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import AuthProvider from "~/contexts/AuthProvider";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -63,11 +69,23 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <KeyboardProvider>
-        <Stack screenOptions={{ headerShown: false }} />
-      </KeyboardProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        <KeyboardProvider>
+          <Stack>
+            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+            <Stack.Screen
+              name='(auth)/signin'
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name='(auth)/signup'
+              options={{ headerShown: false }}
+            />
+          </Stack>
+        </KeyboardProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }

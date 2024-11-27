@@ -11,9 +11,11 @@ import { LogInIcon, EyeIcon, EyeOffIcon } from "~/lib/icons";
 
 import SigninSvg from "~/assets/svg/mobile_login.svg";
 import { Label } from "~/components/ui/label";
+import { useAuth } from "~/contexts/AuthProvider";
 
 export default function Signin() {
   const insets = useSafeAreaInsets();
+  const { login } = useAuth();
 
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [value, setValue] = useState({
@@ -26,6 +28,10 @@ export default function Signin() {
       ...value,
       [k]: v,
     });
+  };
+
+  const onSubmit = () => {
+    login(value.username, value.password);
   };
 
   return (
@@ -97,7 +103,7 @@ export default function Signin() {
           <View className='mt-4'>
             <Button
               className='w-full flex flex-row justify-center items-center gap-2'
-              onPress={() => console.log("Login")}
+              onPress={() => onSubmit()}
             >
               <LogInIcon size={14} className='text-white dark:text-gray-500' />
               <Text>Sign In</Text>
@@ -108,7 +114,7 @@ export default function Signin() {
               <Text className='text-gray-600 dark:text-gray-400'>
                 Don't have an account ?
               </Text>
-              <Link href='/auth/signup' asChild>
+              <Link href='/(auth)/signup' asChild>
                 <Text className='text-gray-600 dark:text-gray-400 hover:underline'>
                   Sign up
                 </Text>

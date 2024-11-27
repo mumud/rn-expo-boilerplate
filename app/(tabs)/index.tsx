@@ -2,12 +2,15 @@ import { Pressable, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button } from "~/components/ui/button";
+import { Card, CardContent } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Text } from "~/components/ui/text";
+import { useAuth } from "~/contexts/AuthProvider";
 import { BellIcon, SearchIcon, SlidersHorizontalIcon } from "~/lib/icons";
 
 export default function Index() {
   const insets = useSafeAreaInsets();
+  const { user } = useAuth();
 
   return (
     <KeyboardAwareScrollView
@@ -19,11 +22,13 @@ export default function Index() {
       <View className='min-h-full bg-neutral-50 dark:bg-gray-950 px-5'>
         <View className='mt-[60px] flex flex-row justify-between items-center'>
           <View className='flex flex-col'>
-            <Text className='text-xl font-extrabold'>Hai, Jhony Kemod</Text>
+            <Text className='text-xl font-extrabold'>
+              Hai, {user?.username}
+            </Text>
             <Text>Great to see you again</Text>
           </View>
           <Pressable
-            className='bg-gray-100 dark:bg-gray-800 p-4 rounded-lg'
+            className='bg-gray-100 dark:bg-gray-800 p-3 rounded-lg'
             onPress={() => console.log("Notification")}
           >
             <BellIcon
@@ -52,7 +57,11 @@ export default function Index() {
           </Button>
         </View>
         <View className='mt-5'>
-          <Text className='text-lg font-bold'>Recent</Text>
+          <Card className='w-full'>
+            <CardContent className='p-4'>
+              <Text>Card Content</Text>
+            </CardContent>
+          </Card>
         </View>
       </View>
     </KeyboardAwareScrollView>
