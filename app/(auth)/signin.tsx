@@ -1,37 +1,74 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Pressable, View } from "react-native";
 import { Link } from "expo-router";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Text } from "~/components/ui/text";
-import { LogInIcon, EyeIcon, EyeOffIcon } from "~/lib/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Text } from "@/components/ui/text";
+import { LogInIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icons";
+import { Label } from "@/components/ui/label";
 
-import SigninSvg from "~/assets/svg/mobile_login.svg";
-import { Label } from "~/components/ui/label";
-import { useAuth } from "~/contexts/AuthProvider";
+import SigninSvg from "@/assets/svg/mobile_login.svg";
+import { useAuth } from "@/contexts/AuthProvider";
+import { useForm } from "@/hooks";
+import type { LoginCredentials } from "@/types";
+import { VALIDATION_RULES, ROUTES } from "@/constants";
+import { cn } from "@/lib/utils";
 
 export default function Signin() {
   const insets = useSafeAreaInsets();
   const { login } = useAuth();
-
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const [value, setValue] = useState({
-    username: "",
-    password: "",
+
+  const {
+    values,
+    errors,
+    touched,
+    isValid,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+  } = useForm({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationRules: {
+      username: [
+        {
+          required: true,
+          minLength: VALIDATION_RULES.USERNAME.MIN_LENGTH,
+        },
+      ],
+      password: [
+        {
+          required: true,
+          minLength: VALIDATION_RULES.PASSWORD.MIN_LENGTH,
+        },
+      ],
+    },
+    onSubmit: async (formValues) => {
+      try {
+        const credentials: LoginCredentials = {
+          username: formValues.username,
+          password: formValues.password,
+        };
+        await login(credentials);
+      } catch (error) {
+        console.error("Login error:", error);
+      }
+    },
   });
 
-  const onChange = (k: "username" | "password", v: string) => {
-    setValue({
-      ...value,
-      [k]: v,
-    });
+  const getFieldError = (field: string) => {
+    return touched[field] ? errors[field] : null;
   };
 
-  const onSubmit = () => {
-    login(value.username, value.password);
+  const toggleSecureTextEntry = () => {
+    setSecureTextEntry(!secureTextEntry);
   };
 
   return (
@@ -47,77 +84,117 @@ export default function Signin() {
           <View className='flex justify-center items-center'>
             <Text className='text-2xl font-bold'>Welcome</Text>
           </View>
+
           <View className='pt-8'>
+            {/* Username Field */}
             <View>
               <Label nativeID='username'>Username</Label>
               <Input
                 placeholder='Enter your username'
-                value={value.username}
-                onChangeText={(value) => onChange("username", value)}
+                value={values.username}
+                onChangeText={(value) => handleChange("username", value)}
+                onBlur={() => handleBlur("username")}
                 aria-labelledby='usernameLabel'
                 aria-errormessage='usernameError'
-                className='mt-2'
+                className={cn(
+                  "mt-2",
+                  getFieldError("username")
+                    ? "border-red-500 dark:border-red-400"
+                    : ""
+                )}
+                editable={!isSubmitting}
               />
+              {getFieldError("username") && (
+                <Text className='text-xs text-red-500 dark:text-red-400 mt-1'>
+                  {getFieldError("username")}
+                </Text>
+              )}
             </View>
+
+            {/* Password Field */}
             <View className='mt-4'>
               <Label nativeID='password'>Password</Label>
-              <View>
+              <View className='relative'>
                 <Input
                   placeholder='Enter your password'
-                  value={value.password}
-                  onChangeText={(value) => onChange("password", value)}
+                  value={values.password}
+                  onChangeText={(value) => handleChange("password", value)}
+                  onBlur={() => handleBlur("password")}
                   aria-labelledby='passwordLabel'
                   aria-errormessage='passwordError'
-                  className='mt-2 pr-11'
                   secureTextEntry={secureTextEntry}
+                  className={cn(
+                    "mt-2 pr-12",
+                    getFieldError("password")
+                      ? "border-red-500 dark:border-red-400"
+                      : ""
+                  )}
+                  editable={!isSubmitting}
                 />
                 <Pressable
-                  onPress={() => setSecureTextEntry(!secureTextEntry)}
-                  className='absolute right-0 top-1/2 transform -translate-y-1/3 px-4'
+                  onPress={toggleSecureTextEntry}
+                  className='absolute right-3 top-1/2 -translate-y-1/2 mt-1'
+                  disabled={isSubmitting}
                 >
                   {secureTextEntry ? (
-                    <EyeIcon
-                      size={16}
-                      className='text-gray-400 dark:text-gray-400'
-                    />
+                    <EyeOffIcon className='text-gray-500' size={20} />
                   ) : (
-                    <EyeOffIcon
-                      size={16}
-                      className='text-gray-400 dark:text-gray-400'
-                    />
+                    <EyeIcon className='text-gray-500' size={20} />
                   )}
                 </Pressable>
               </View>
-            </View>
-          </View>
-          <View className='mt-4'>
-            <View className='flex flex-row items-center justify-end'>
-              <Text
-                className='text-gray-600 dark:text-gray-400 hover:underline'
-                onPress={() => console.log("Forgot password")}
-              >
-                Forgot Password ?
-              </Text>
-            </View>
-          </View>
-          <View className='mt-4'>
-            <Button
-              className='w-full flex flex-row justify-center items-center gap-2'
-              onPress={() => onSubmit()}
-            >
-              <LogInIcon size={14} className='text-white dark:text-gray-500' />
-              <Text>Sign In</Text>
-            </Button>
-          </View>
-          <View className='mt-5'>
-            <View className='flex flex-row items-center justify-between'>
-              <Text className='text-gray-600 dark:text-gray-400'>
-                Don't have an account ?
-              </Text>
-              <Link href='/(auth)/signup' asChild>
-                <Text className='text-gray-600 dark:text-gray-400 hover:underline'>
-                  Sign up
+              {getFieldError("password") && (
+                <Text className='text-xs text-red-500 dark:text-red-400 mt-1'>
+                  {getFieldError("password")}
                 </Text>
+              )}
+            </View>
+
+            {/* Forgot Password Link */}
+            <View className='mt-6'>
+              <Link href={ROUTES.AUTH.FORGOT_PASSWORD} asChild>
+                <Pressable disabled={isSubmitting}>
+                  <Text className='text-sm text-blue-600 dark:text-blue-400 text-right'>
+                    Forgot Password?
+                  </Text>
+                </Pressable>
+              </Link>
+            </View>
+
+            {/* Sign In Button */}
+            <View className='mt-6'>
+              <Button
+                onPress={handleSubmit}
+                className={cn(
+                  "w-full",
+                  isSubmitting || !isValid ? "opacity-50" : ""
+                )}
+                disabled={isSubmitting || !isValid}
+              >
+                {isSubmitting ? (
+                  <Text className='text-white font-semibold'>
+                    Signing In...
+                  </Text>
+                ) : (
+                  <View className='flex flex-row'>
+                    <LogInIcon className='text-white mr-2' size={18} />
+                    <Text className='text-white font-semibold'>Sign In</Text>
+                  </View>
+                )}
+              </Button>
+            </View>
+
+            {/* Sign Up Link */}
+            <View className='mt-6 flex-row justify-center'>
+              <Text className='text-sm text-gray-600 dark:text-gray-400'>
+                Don't have an account?{" "}
+              </Text>
+              <Link href={ROUTES.AUTH.SIGNUP} asChild>
+                <Pressable disabled={isSubmitting}>
+                  <Text className='text-sm text-blue-600 dark:text-blue-400 font-semibold'>
+                    Sign up
+                  </Text>
+                </Pressable>
               </Link>
             </View>
           </View>

@@ -1,9 +1,354 @@
-import { View, Text } from "react-native";
+/**
+ * Account Screen
+ * Halaman profil dan pengaturan akun user
+ */
+
+import React, { useState } from "react";
+import {
+  View,
+  Pressable,
+  Alert,
+  Switch,
+  ScrollView,
+  Image,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Text } from "@/components/ui/text";
+import { useAuth } from "@/contexts/AuthProvider";
+import {
+  UserIcon,
+  BellIcon,
+  HelpCircleIcon,
+  LogInIcon,
+  ArrowRightIcon,
+  MoonStarIcon,
+  SunIcon,
+  MailIcon,
+  CreditCardIcon,
+} from "@/components/ui/icons";
+import { APP_CONFIG } from "@/constants";
+
+// Interface untuk menu item
+interface AccountMenuItem {
+  id: string;
+  title: string;
+  subtitle?: string;
+  icon: React.ComponentType<any>;
+  onPress: () => void;
+  showArrow?: boolean;
+  rightComponent?: React.ReactNode;
+}
+
+// Interface untuk user profile
+interface UserProfile {
+  name: string;
+  email: string;
+  avatar?: string;
+  memberSince: string;
+  plan: string;
+}
 
 export default function Account() {
+  const insets = useSafeAreaInsets();
+  const { user, logout } = useAuth();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Mock user profile data
+  const userProfile: UserProfile = {
+    name: user?.username || "John Doe",
+    email: user?.email || "john.doe@example.com",
+    memberSince: "January 2024",
+    plan: "Premium",
+  };
+
+  /**
+   * Handle logout dengan konfirmasi
+   */
+  const handleLogout = () => {
+    Alert.alert("Logout", "Apakah Anda yakin ingin keluar dari akun?", [
+      {
+        text: "Batal",
+        style: "cancel",
+      },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            setIsLoading(true);
+            await logout();
+          } catch (error) {
+            Alert.alert("Error", "Gagal logout. Silakan coba lagi.");
+          } finally {
+            setIsLoading(false);
+          }
+        },
+      },
+    ]);
+  };
+
+  /**
+   * Handle toggle dark mode
+   */
+  const handleDarkModeToggle = (value: boolean) => {
+    setIsDarkMode(value);
+    // TODO: Implement actual dark mode logic
+    Alert.alert(
+      "Dark Mode",
+      value ? "Dark mode diaktifkan" : "Dark mode dinonaktifkan"
+    );
+  };
+
+  /**
+   * Handle toggle notifications
+   */
+  const handleNotificationsToggle = (value: boolean) => {
+    setNotificationsEnabled(value);
+    Alert.alert(
+      "Notifikasi",
+      value ? "Notifikasi diaktifkan" : "Notifikasi dinonaktifkan"
+    );
+  };
+
+  /**
+   * Handle menu item press
+   */
+  const handleMenuPress = (menuId: string) => {
+    switch (menuId) {
+      case "edit-profile":
+        Alert.alert("Edit Profile", "Fitur edit profile akan segera hadir!");
+        break;
+      case "billing":
+        Alert.alert("Billing", "Fitur billing akan segera hadir!");
+        break;
+      case "help":
+        Alert.alert("Help & Support", "Fitur help akan segera hadir!");
+        break;
+      case "contact":
+        Alert.alert("Contact Us", "Fitur contact akan segera hadir!");
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Menu items configuration
+  const menuItems: AccountMenuItem[] = [
+    {
+      id: "edit-profile",
+      title: "Edit Profile",
+      subtitle: "Update informasi profil Anda",
+      icon: UserIcon,
+      onPress: () => handleMenuPress("edit-profile"),
+      showArrow: true,
+    },
+    {
+      id: "billing",
+      title: "Billing & Subscription",
+      subtitle: "Kelola pembayaran dan langganan",
+      icon: CreditCardIcon,
+      onPress: () => handleMenuPress("billing"),
+      showArrow: true,
+    },
+    {
+      id: "notifications",
+      title: "Notifikasi",
+      subtitle: "Atur preferensi notifikasi",
+      icon: BellIcon,
+      onPress: () => {},
+      rightComponent: (
+        <Switch
+          value={notificationsEnabled}
+          onValueChange={handleNotificationsToggle}
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={notificationsEnabled ? "#f5dd4b" : "#f4f3f4"}
+        />
+      ),
+    },
+    {
+      id: "dark-mode",
+      title: "Dark Mode",
+      subtitle: "Ubah tema aplikasi",
+      icon: isDarkMode ? MoonStarIcon : SunIcon,
+      onPress: () => {},
+      rightComponent: (
+        <Switch
+          value={isDarkMode}
+          onValueChange={handleDarkModeToggle}
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={isDarkMode ? "#f5dd4b" : "#f4f3f4"}
+        />
+      ),
+    },
+    {
+      id: "help",
+      title: "Help & Support",
+      subtitle: "Bantuan dan dukungan pelanggan",
+      icon: HelpCircleIcon,
+      onPress: () => handleMenuPress("help"),
+      showArrow: true,
+    },
+    {
+      id: "contact",
+      title: "Contact Us",
+      subtitle: "Hubungi tim support",
+      icon: MailIcon,
+      onPress: () => handleMenuPress("contact"),
+      showArrow: true,
+    },
+  ];
+
   return (
-    <View>
-      <Text>Tab Account</Text>
-    </View>
+    <ScrollView
+      className='flex-1 bg-gray-50 dark:bg-gray-900'
+      contentContainerStyle={{
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom + 20,
+      }}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Header */}
+      <View className='px-6 py-4'>
+        <Text className='text-2xl font-bold text-gray-900 dark:text-white'>
+          Account
+        </Text>
+        <Text className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
+          Kelola profil dan pengaturan akun Anda
+        </Text>
+      </View>
+
+      {/* Profile Card */}
+      <View className='px-6 mb-6'>
+        <Card className='bg-white dark:bg-gray-800'>
+          <CardContent className='p-6'>
+            <View className='flex-row items-center'>
+              {/* Avatar */}
+              <View className='w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full items-center justify-center mr-4'>
+                {userProfile.avatar ? (
+                  <Image
+                    source={{ uri: userProfile.avatar }}
+                    className='w-16 h-16 rounded-full'
+                  />
+                ) : (
+                  <UserIcon
+                    size={32}
+                    className='text-blue-600 dark:text-blue-400'
+                  />
+                )}
+              </View>
+
+              {/* User Info */}
+              <View className='flex-1'>
+                <Text className='text-lg font-semibold text-gray-900 dark:text-white'>
+                  {userProfile.name}
+                </Text>
+                <Text className='text-sm text-gray-600 dark:text-gray-400'>
+                  {userProfile.email}
+                </Text>
+                <View className='flex-row items-center mt-2'>
+                  <View className='bg-green-100 dark:bg-green-900 px-2 py-1 rounded-full mr-2'>
+                    <Text className='text-xs font-medium text-green-800 dark:text-green-200'>
+                      {userProfile.plan}
+                    </Text>
+                  </View>
+                  <Text className='text-xs text-gray-500 dark:text-gray-400'>
+                    Member since {userProfile.memberSince}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </CardContent>
+        </Card>
+      </View>
+
+      {/* Menu Items */}
+      <View className='px-6'>
+        <Text className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
+          Settings
+        </Text>
+
+        <Card className='bg-white dark:bg-gray-800'>
+          <CardContent className='p-0'>
+            {menuItems.map((item, index) => {
+              const Icon = item.icon;
+              const isLast = index === menuItems.length - 1;
+
+              return (
+                <Pressable
+                  key={item.id}
+                  onPress={item.onPress}
+                  className='flex-row items-center p-4 active:bg-gray-50 dark:active:bg-gray-700'
+                  style={({ pressed }) => ({
+                    backgroundColor: pressed
+                      ? "rgba(0, 0, 0, 0.05)"
+                      : "transparent",
+                  })}
+                >
+                  {/* Icon */}
+                  <View className='w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full items-center justify-center mr-3'>
+                    <Icon
+                      size={20}
+                      className='text-gray-600 dark:text-gray-400'
+                    />
+                  </View>
+
+                  {/* Content */}
+                  <View className='flex-1'>
+                    <Text className='text-base font-medium text-gray-900 dark:text-white'>
+                      {item.title}
+                    </Text>
+                    {item.subtitle && (
+                      <Text className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
+                        {item.subtitle}
+                      </Text>
+                    )}
+                  </View>
+
+                  {/* Right Component */}
+                  {item.rightComponent ? (
+                    item.rightComponent
+                  ) : item.showArrow ? (
+                    <ArrowRightIcon
+                      size={20}
+                      className='text-gray-400 dark:text-gray-500'
+                    />
+                  ) : null}
+                </Pressable>
+              );
+            })}
+          </CardContent>
+        </Card>
+      </View>
+
+      {/* Logout Button */}
+      <View className='px-6 mt-8'>
+        <Button
+          onPress={handleLogout}
+          disabled={isLoading}
+          className='bg-red-600 hover:bg-red-700 active:bg-red-700'
+        >
+          <View className='flex-row items-center justify-center'>
+            <LogInIcon size={20} className='text-white mr-2' />
+            <Text className='text-white font-medium'>
+              {isLoading ? "Logging out..." : "Logout"}
+            </Text>
+          </View>
+        </Button>
+      </View>
+
+      {/* App Info */}
+      <View className='px-6 mt-6 items-center'>
+        <Text className='text-xs text-gray-500 dark:text-gray-400'>
+          {APP_CONFIG.NAME} v{APP_CONFIG.VERSION}
+        </Text>
+        <Text className='text-xs text-gray-400 dark:text-gray-500 mt-1'>
+          © 2024 All rights reserved
+        </Text>
+      </View>
+    </ScrollView>
   );
 }

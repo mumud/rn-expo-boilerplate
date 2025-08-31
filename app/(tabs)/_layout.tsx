@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { HomeIcon, User2Icon, PackageIcon } from "lucide-react-native";
+import { HomeIcon, User2Icon } from "lucide-react-native";
 
 export default function TabLayout() {
   return (
