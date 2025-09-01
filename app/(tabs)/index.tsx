@@ -1,6 +1,6 @@
 /**
  * Home Screen
- * Halaman utama aplikasi dengan proper error handling dan loading states
+ * Main application page with proper error handling and loading states
  */
 
 import React, { useState, useEffect } from "react";
@@ -10,14 +10,15 @@ import {
   Alert,
   RefreshControl,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import { Link } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
-import { useAuth } from "@/contexts/AuthProvider";
+import { useAuth } from "@/hooks/useAuth";
 import {
   BellIcon,
   SearchIcon,
@@ -35,40 +36,40 @@ import {
   StarIcon,
   ArrowRightIcon,
 } from "@/components/ui/icons";
-import { ERROR_MESSAGES } from "@/constants";
+import { ERROR_MESSAGES, ROUTES } from "@/constants";
 
-// Interface untuk home data
+// Interface for home data
 interface HomeData {
   notifications: number;
-  recentActivity: Array<{
+  recentActivity: {
     id: number;
     title: string;
     time: string;
-  }>;
+  }[];
   stats: {
     totalTasks: number;
     completedTasks: number;
     pendingTasks: number;
     todayTasks: number;
   };
-  tasks: Array<{
+  tasks: {
     id: number;
     title: string;
     description: string;
     priority: "high" | "medium" | "low";
     status: "pending" | "in_progress" | "completed";
     dueDate: string;
-  }>;
-  featuredContent: Array<{
+  }[];
+  featuredContent: {
     id: number;
     title: string;
     description: string;
     image: string;
     category: string;
-  }>;
+  }[];
 }
 
-// Interface untuk menu items
+// Interface for menu items
 interface MenuItem {
   id: string;
   title: string;
@@ -81,7 +82,7 @@ export default function Index() {
   const insets = useSafeAreaInsets();
   const { user, isLoading, error, clearError } = useAuth();
 
-  // Local state untuk data dan loading
+  // Local state for data and loading
   const [searchQuery, setSearchQuery] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [homeData, setHomeData] = useState<HomeData | null>(null);
@@ -89,7 +90,7 @@ export default function Index() {
   const [isLoadingData, setIsLoadingData] = useState(false);
 
   /**
-   * Simulasi fetch data untuk halaman home
+   * Simulate fetch data for home page
    */
   const fetchHomeData = async () => {
     try {
@@ -194,21 +195,6 @@ export default function Index() {
     setSearchQuery(query);
     // Implementasi search logic di sini
     console.log("Searching for:", query);
-  };
-
-  /**
-   * Handle notification press
-   */
-  const handleNotificationPress = () => {
-    if (homeData?.notifications && homeData.notifications > 0) {
-      Alert.alert(
-        "Notifications",
-        `You have ${homeData.notifications} new notifications`,
-        [{ text: "OK" }]
-      );
-    } else {
-      Alert.alert("Notifications", "No new notifications", [{ text: "OK" }]);
-    }
   };
 
   /**
@@ -350,14 +336,29 @@ export default function Index() {
       color: "bg-purple-500",
       onPress: () => Alert.alert("Help", "Navigate to help page"),
     },
+    {
+      id: "notifications",
+      title: "Notifications",
+      icon: BellIcon,
+      color: "bg-red-500",
+      onPress: () =>
+        Alert.alert("Notifications", "Navigate to notifications page"),
+    },
+    {
+      id: "analytics",
+      title: "Analytics",
+      icon: TrendingUpIcon,
+      color: "bg-indigo-500",
+      onPress: () => Alert.alert("Analytics", "Navigate to analytics page"),
+    },
   ];
 
-  // Load data saat component mount
+  // Load data when component mounts
   useEffect(() => {
     fetchHomeData();
   }, []);
 
-  // Clear auth error jika ada
+  // Clear auth error if exists
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -367,11 +368,11 @@ export default function Index() {
     }
   }, [error, clearError]);
 
-  // Loading state untuk initial load
+  // Loading state for initial load
   if (isLoading || (isLoadingData && !homeData)) {
     return (
       <View className='flex-1 justify-center items-center bg-neutral-50 dark:bg-gray-950'>
-        <ActivityIndicator size='large' className='text-blue-600' />
+        <ActivityIndicator size='large' color='#3B82F6' />
         <Text className='mt-4 text-gray-600 dark:text-gray-400'>
           Loading...
         </Text>
@@ -380,8 +381,7 @@ export default function Index() {
   }
 
   return (
-    <KeyboardAwareScrollView
-      bottomOffset={8}
+    <ScrollView
       keyboardShouldPersistTaps='handled'
       keyboardDismissMode='interactive'
       contentContainerStyle={{ paddingBottom: insets.bottom }}
@@ -420,19 +420,21 @@ export default function Index() {
               Great to see you again
             </Text>
           </View>
-          <Pressable
-            className='bg-gray-100 dark:bg-gray-800 p-3 rounded-lg relative'
-            onPress={handleNotificationPress}
-          >
-            <BellIcon size={16} className='text-gray-400 dark:text-gray-400' />
-            {homeData?.notifications && homeData.notifications > 0 && (
-              <View className='absolute -top-1 -right-1 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center'>
-                <Text className='text-xs text-white font-bold'>
-                  {homeData.notifications > 9 ? "9+" : homeData.notifications}
-                </Text>
-              </View>
-            )}
-          </Pressable>
+          <Link href={ROUTES.NOTIFICATIONS} asChild>
+            <Pressable className='bg-gray-100 dark:bg-gray-800 p-3 rounded-lg relative'>
+              <BellIcon
+                size={16}
+                className='text-gray-400 dark:text-gray-400'
+              />
+              {homeData?.notifications && homeData.notifications > 0 && (
+                <View className='absolute -top-1 -right-1 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center'>
+                  <Text className='text-xs text-white font-bold'>
+                    {homeData.notifications > 9 ? "9+" : homeData.notifications}
+                  </Text>
+                </View>
+              )}
+            </Pressable>
+          </Link>
         </View>
 
         {/* Search Section */}
@@ -482,18 +484,18 @@ export default function Index() {
             /* Main Content */
             <>
               {/* Promotional Banner */}
-              <Card className='w-full mb-4 bg-gradient-to-r from-blue-500 to-purple-600'>
+              <Card className='w-full mb-4 bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700'>
                 <CardContent className='p-4'>
                   <View className='flex-row items-center justify-between'>
                     <View className='flex-1'>
-                      <Text className='text-lg font-bold text-white mb-1'>
+                      <Text className='text-lg font-bold text-gray-600 dark:text-blue-200 mb-1'>
                         🎉 Special Offer!
                       </Text>
-                      <Text className='text-sm text-blue-100 mb-2'>
+                      <Text className='text-sm text-gray-600 dark:text-blue-200 mb-2'>
                         Get 30% off on premium features this month
                       </Text>
-                      <Pressable className='bg-white/20 px-3 py-1 rounded-full self-start'>
-                        <Text className='text-white text-xs font-semibold'>
+                      <Pressable className='bg-white/20 dark:bg-white/30 px-3 py-1 rounded-full self-start'>
+                        <Text className='text-gray-600 dark:text-blue-200 text-xs font-semibold'>
                           Learn More
                         </Text>
                       </Pressable>
@@ -573,15 +575,40 @@ export default function Index() {
               {/* Main Menu Grid */}
               <View className='mb-4'>
                 <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3'>
-                  Quick Actions
+                  Main Menu
                 </Text>
-                <View className='flex-row flex-wrap justify-between gap-3'>
-                  {menuItems.map((item) => {
+                {/* Baris Pertama - 3 Menu */}
+                <View className='flex-row justify-between gap-3 mb-3'>
+                  {menuItems.slice(0, 3).map((item) => {
                     const IconComponent = item.icon;
                     return (
                       <Pressable
                         key={item.id}
-                        className='w-[48%] bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700'
+                        className='flex-1 bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700'
+                        onPress={item.onPress}
+                      >
+                        <View className='items-center'>
+                          <View
+                            className={`${item.color} p-3 rounded-full mb-2`}
+                          >
+                            <IconComponent className='text-white' size={20} />
+                          </View>
+                          <Text className='text-sm font-medium text-gray-900 dark:text-gray-100'>
+                            {item.title}
+                          </Text>
+                        </View>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+                {/* Baris Kedua - 3 Menu */}
+                <View className='flex-row justify-between gap-3'>
+                  {menuItems.slice(3, 6).map((item) => {
+                    const IconComponent = item.icon;
+                    return (
+                      <Pressable
+                        key={item.id}
+                        className='flex-1 bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700'
                         onPress={item.onPress}
                       >
                         <View className='items-center'>
@@ -714,7 +741,7 @@ export default function Index() {
                         key={activity.id}
                         className='flex-row items-center py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0'
                       >
-                        <View className='w-2 h-2 bg-blue-500 rounded-full mr-3' />
+                        <View className='w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full mr-3' />
                         <View className='flex-1'>
                           <Text className='text-sm font-medium text-gray-900 dark:text-gray-100'>
                             {activity.title}
@@ -732,6 +759,6 @@ export default function Index() {
           )}
         </View>
       </View>
-    </KeyboardAwareScrollView>
+    </ScrollView>
   );
 }

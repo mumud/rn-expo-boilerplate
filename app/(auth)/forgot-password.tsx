@@ -1,12 +1,11 @@
 /**
  * Forgot Password Screen
- * Halaman untuk reset password dengan form validation dan error handling
+ * Page for password reset with form validation and error handling
  */
 
 import React, { useState } from "react";
-import { Pressable, View, Alert } from "react-native";
+import { Pressable, View, Alert, ScrollView } from "react-native";
 import { Link } from "expo-router";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button } from "@/components/ui/button";
@@ -16,8 +15,7 @@ import { MailIcon, ArrowLeftIcon } from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
 
 import ForgotPasswordSvg from "@/assets/svg/mobile_login.svg";
-import { useAuth } from "@/hooks";
-import { useForm } from "@/hooks";
+import { useForm, useAuth } from "@/hooks";
 import { VALIDATION_RULES, ROUTES } from "@/constants";
 
 export default function ForgotPassword() {
@@ -26,7 +24,7 @@ export default function ForgotPassword() {
   const [isEmailSent, setIsEmailSent] = useState(false);
 
   /**
-   * Form configuration dengan validation rules
+   * Form configuration with validation rules
    */
   const {
     values,
@@ -65,23 +63,23 @@ export default function ForgotPassword() {
             [{ text: "OK" }]
           );
         } else {
-          // Error akan ditampilkan dari auth hook
-          console.log("Forgot password failed:", response.error);
+          // Error will be displayed from auth hook
+          console.log("Forgot password failed: ", response.message);
         }
       } catch (err) {
         console.error("Forgot password error:", err);
         Alert.alert(
           "Error",
-          "Terjadi kesalahan saat mengirim email reset. Silakan coba lagi."
+          "An error occurred while sending reset email. Please try again."
         );
       }
     },
   });
 
   /**
-   * Handle perubahan nilai input
-   * @param field - Nama field
-   * @param value - Nilai baru
+   * Handle input value changes
+   * @param field - Field name
+   * @param value - New value
    */
   const onChange = (field: string, value: string) => {
     handleChange(field, value);
@@ -89,23 +87,23 @@ export default function ForgotPassword() {
 
   /**
    * Handle blur event
-   * @param field - Nama field
+   * @param field - Field name
    */
   const onBlur = (field: string) => {
     handleBlur(field);
   };
 
   /**
-   * Get error message untuk field tertentu
-   * @param field - Nama field
-   * @returns Error message atau null
+   * Get error message for specific field
+   * @param field - Field name
+   * @returns Error message or null
    */
   const getFieldError = (field: string): string | null => {
     return touched[field] && errors[field] ? errors[field] : null;
   };
 
   /**
-   * Handle try again - reset form dan state
+   * Handle try again - reset form and state
    */
   const handleTryAgain = () => {
     setIsEmailSent(false);
@@ -114,8 +112,7 @@ export default function ForgotPassword() {
   };
 
   return (
-    <KeyboardAwareScrollView
-      bottomOffset={8}
+    <ScrollView
       keyboardShouldPersistTaps='handled'
       keyboardDismissMode='interactive'
       contentContainerStyle={{ paddingBottom: insets.bottom }}
@@ -237,12 +234,12 @@ export default function ForgotPassword() {
                   {isLoading ? (
                     <Text className='text-white font-semibold'>Sending...</Text>
                   ) : (
-                    <>
+                    <View className='flex-row items-center justify-center'>
                       <MailIcon className='text-white mr-2' size={18} />
                       <Text className='text-white font-semibold'>
                         Send Reset Link
                       </Text>
-                    </>
+                    </View>
                   )}
                 </Button>
               </View>
@@ -264,6 +261,6 @@ export default function ForgotPassword() {
           )}
         </View>
       </View>
-    </KeyboardAwareScrollView>
+    </ScrollView>
   );
 }

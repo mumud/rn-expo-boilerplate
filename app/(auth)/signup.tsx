@@ -4,9 +4,8 @@
  */
 
 import React, { useState } from "react";
-import { Pressable, View, Alert } from "react-native";
+import { Pressable, View, Alert, ScrollView } from "react-native";
 import { Link } from "expo-router";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,7 @@ import { UserPlusIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
 
 import SignupSvg from "@/assets/svg/mobile_login.svg";
-import { useAuth } from "@/contexts/AuthProvider";
+import { useAuth } from '@/hooks/useAuth';
 import { useForm } from "@/hooks";
 import type { RegisterCredentials } from "@/types";
 import { VALIDATION_RULES, ROUTES } from "@/constants";
@@ -51,40 +50,52 @@ export default function Signup() {
       lastName: "",
     },
     validationRules: {
-      username: [{
-        required: true,
-        minLength: VALIDATION_RULES.USERNAME.MIN_LENGTH,
-        maxLength: VALIDATION_RULES.USERNAME.MAX_LENGTH,
-        pattern: VALIDATION_RULES.USERNAME.PATTERN,
-      }],
-      email: [{
-        required: true,
-        pattern: VALIDATION_RULES.EMAIL.PATTERN,
-      }],
-      password: [{
-        required: true,
-        minLength: VALIDATION_RULES.PASSWORD.MIN_LENGTH,
-        pattern: VALIDATION_RULES.PASSWORD.PATTERN,
-      }],
-      confirmPassword: [{
-        required: true,
-        custom: (value: string) => {
-          if (value !== values.password) {
-            return "Password dan konfirmasi password tidak sama";
-          }
-          return null;
+      username: [
+        {
+          required: true,
+          minLength: VALIDATION_RULES.USERNAME.MIN_LENGTH,
+          maxLength: VALIDATION_RULES.USERNAME.MAX_LENGTH,
+          pattern: VALIDATION_RULES.USERNAME.PATTERN,
         },
-      }],
-      firstName: [{
-        required: false,
-        minLength: 2,
-        maxLength: 50,
-      }],
-      lastName: [{
-        required: false,
-        minLength: 2,
-        maxLength: 50,
-      }],
+      ],
+      email: [
+        {
+          required: true,
+          pattern: VALIDATION_RULES.EMAIL.PATTERN,
+        },
+      ],
+      password: [
+        {
+          required: true,
+          minLength: VALIDATION_RULES.PASSWORD.MIN_LENGTH,
+          pattern: VALIDATION_RULES.PASSWORD.PATTERN,
+        },
+      ],
+      confirmPassword: [
+        {
+          required: true,
+          custom: (value: string) => {
+            if (value !== values.password) {
+              return "Password dan konfirmasi password tidak sama";
+            }
+            return null;
+          },
+        },
+      ],
+      firstName: [
+        {
+          required: false,
+          minLength: 2,
+          maxLength: 50,
+        },
+      ],
+      lastName: [
+        {
+          required: false,
+          minLength: 2,
+          maxLength: 50,
+        },
+      ],
     },
     onSubmit: async (formValues) => {
       try {
@@ -154,8 +165,7 @@ export default function Signup() {
   };
 
   return (
-    <KeyboardAwareScrollView
-      bottomOffset={8}
+    <ScrollView
       keyboardShouldPersistTaps='handled'
       keyboardDismissMode='interactive'
       contentContainerStyle={{ paddingBottom: insets.bottom }}
@@ -358,10 +368,10 @@ export default function Signup() {
                     Creating Account...
                   </Text>
                 ) : (
-                  <>
+                  <View className='flex-row items-center justify-center'>
                     <UserPlusIcon className='text-white mr-2' size={18} />
                     <Text className='text-white font-semibold'>Sign Up</Text>
-                  </>
+                  </View>
                 )}
               </Button>
             </View>
@@ -382,6 +392,6 @@ export default function Signup() {
           </View>
         </View>
       </View>
-    </KeyboardAwareScrollView>
+    </ScrollView>
   );
 }

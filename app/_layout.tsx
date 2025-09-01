@@ -5,17 +5,19 @@
 
 import "@/global.css";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeProvider } from "@react-navigation/native";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { Platform, Alert } from "react-native";
 import { NAV_THEME } from "@/lib/theme";
-import { KeyboardProvider } from "react-native-keyboard-controller";
-import AuthProvider from "@/contexts/AuthProvider";
+
 import { PortalHost } from "@rn-primitives/portal";
 import { useColorScheme } from "nativewind";
+import { useThemeStore } from "@/stores";
+import { getThemePreference, saveThemePreference } from "@/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { useProtectedRoute } from "@/hooks/useProtectedRoute";
 
 // Custom Error Boundary untuk menangani error global
 class CustomErrorBoundary extends React.Component<
@@ -66,68 +68,86 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const { colorScheme, setColorScheme } = useColorScheme();
+  const { initializeTheme, setMode } = useThemeStore();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
+  const [isInitialized, setIsInitialized] = React.useState(false);
+
+  // Auth state untuk protected routing
+  const { user, isLoading } = useAuth();
+
+  // Protected route logic untuk auto redirect - hanya setelah component mounted
+  useProtectedRoute(user, isLoading || !isColorSchemeLoaded);
 
   React.useEffect(() => {
+    // Prevent multiple initialization
+    if (isInitialized) {
+      return;
+    }
+
     (async () => {
-      const theme = await AsyncStorage.getItem("theme");
-      if (Platform.OS === "web") {
-        // Adds the background color to the html element to prevent white background on overscroll.
-        document.documentElement.classList.add("bg-background");
-      }
-      if (!theme) {
-        AsyncStorage.setItem("theme", colorScheme || "light");
-        setIsColorSchemeLoaded(true);
-        return;
-      }
-      const colorTheme = theme === "dark" ? "dark" : "light";
-      if (colorTheme !== colorScheme) {
-        setColorScheme(colorTheme);
+      try {
+        // Initialize theme store
+        await initializeTheme();
+
+        // Get saved theme preference using MMKV
+        const savedTheme = await getThemePreference();
+
+        if (Platform.OS === "web") {
+          // Adds the background color to the html element to prevent white background on overscroll.
+          document.documentElement.classList.add("bg-background");
+        }
+
+        if (!savedTheme || savedTheme === "system") {
+          // Use system theme if no preference saved
+          const systemTheme = colorScheme || "light";
+          await saveThemePreference("system"); // Simpan sebagai 'system'
+          setMode("system"); // Set mode sebagai 'system'
+          setColorScheme(systemTheme);
+        } else {
+          // Use saved theme preference
+          const themeMode = savedTheme === "dark" ? "dark" : "light";
+          if (themeMode !== colorScheme) {
+            setColorScheme(themeMode);
+            setMode(themeMode);
+          }
+        }
 
         setIsColorSchemeLoaded(true);
-        return;
+        setIsInitialized(true);
+      } catch (error) {
+        console.error("Error initializing theme:", error);
+        // Fallback to light theme
+        setColorScheme("light");
+        setMode("light");
+        setIsColorSchemeLoaded(true);
+        setIsInitialized(true);
       }
-      setIsColorSchemeLoaded(true);
     })().finally(() => {
       SplashScreen.hideAsync();
     });
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array untuk hanya run sekali saat mount
 
   if (!isColorSchemeLoaded) {
     return null;
   }
 
   return (
-    <AuthProvider>
+    <CustomErrorBoundary>
       <ThemeProvider value={NAV_THEME[colorScheme || "light"]}>
         <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-        <KeyboardProvider>
-          <Stack>
-            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-            <Stack.Screen
-              name='(auth)/signin'
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='(auth)/signup'
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='(auth)/forgot-password'
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='(auth)/verify-email'
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='(auth)/reset-password'
-              options={{ headerShown: false }}
-            />
-          </Stack>
-        </KeyboardProvider>
+        <Stack>
+          <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+          <Stack.Screen name='(auth)/signin' options={{ headerShown: false }} />
+          <Stack.Screen name='(auth)/signup' options={{ headerShown: false }} />
+          <Stack.Screen
+            name='(auth)/forgot-password'
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name='notification' options={{ headerShown: false }} />
+        </Stack>
         <PortalHost />
       </ThemeProvider>
-    </AuthProvider>
+    </CustomErrorBoundary>
   );
 }

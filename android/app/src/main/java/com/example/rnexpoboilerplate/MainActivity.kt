@@ -1,4 +1,4 @@
-package com.devpintar.rnexpoboilerplate
+package com.example.rnexpoboilerplate
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

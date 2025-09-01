@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Pressable, View } from "react-native";
+import { Pressable, View, ScrollView } from "react-native";
 import { Link } from "expo-router";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,7 @@ import { LogInIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
 
 import SigninSvg from "@/assets/svg/mobile_login.svg";
-import { useAuth } from "@/contexts/AuthProvider";
+import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "@/hooks";
 import type { LoginCredentials } from "@/types";
 import { VALIDATION_RULES, ROUTES } from "@/constants";
@@ -72,8 +71,7 @@ export default function Signin() {
   };
 
   return (
-    <KeyboardAwareScrollView
-      bottomOffset={8}
+    <ScrollView
       keyboardShouldPersistTaps='handled'
       keyboardDismissMode='interactive'
       contentContainerStyle={{ paddingBottom: insets.bottom }}
@@ -200,6 +198,6 @@ export default function Signin() {
           </View>
         </View>
       </View>
-    </KeyboardAwareScrollView>
+    </ScrollView>
   );
 }

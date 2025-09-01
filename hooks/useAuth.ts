@@ -1,312 +1,222 @@
 /**
- * useAuth hook
- * Custom hook untuk authentication operations
+ * useAuth hook - Rebuild Version
+ * Custom hook for authentication operations using new Zustand store
+ * Simple and stable interface for React components
  */
 
-import { useState, useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import type {
-  User,
   LoginCredentials,
   RegisterCredentials,
   AuthResponse,
 } from "@/types";
-import {
-  saveAuthToken,
-  saveUserData,
-  removeAuthToken,
-  removeUserData,
-  clearAuthData,
-} from "@/utils";
-import { API_CONFIG, ERROR_MESSAGES, SUCCESS_MESSAGES } from "@/constants";
-import { delay } from "@/utils";
+import { useAuthStore, authSelectors } from "@/stores";
+import { SUCCESS_MESSAGES } from "@/constants";
 
 /**
- * Custom hook untuk authentication operations
- * @returns Authentication state dan methods
+ * Custom hook for authentication operations
+ * Uses Zustand store with consistent interface
+ * @returns Authentication state and methods
  */
 export const useAuth = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // Use selectors for optimized re-renders
+  const user = useAuthStore(authSelectors.user);
+  const isAuthenticated = useAuthStore(authSelectors.isAuthenticated);
+  const isLoading = useAuthStore(authSelectors.isLoading);
+  const error = useAuthStore(authSelectors.error);
+  const isInitialized = useAuthStore(authSelectors.isInitialized);
+
+  // Use actions from store
+  const loginAction = useAuthStore((state) => state.login);
+  const registerAction = useAuthStore((state) => state.register);
+  const logoutAction = useAuthStore((state) => state.logout);
+  const forgotPasswordAction = useAuthStore((state) => state.forgotPassword);
+  const clearError = useAuthStore((state) => state.clearError);
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+
+  // Initialize auth when hook is first used
+  useEffect(() => {
+    if (!isInitialized) {
+      initializeAuth();
+    }
+  }, [isInitialized, initializeAuth]);
 
   /**
-   * Clear error state
-   */
-  const clearError = useCallback(() => {
-    setError(null);
-  }, []);
-
-  /**
-   * Login user dengan credentials
+   * Login user with credentials
    * @param credentials - Login credentials
-   * @returns Promise dengan user data atau error
+   * @returns Promise with AuthResponse format
    */
   const login = useCallback(
     async (credentials: LoginCredentials): Promise<AuthResponse> => {
-      setIsLoading(true);
-      setError(null);
-
       try {
-        // Simulate API call - replace dengan actual API call
-        await delay(1500);
+        const success = await loginAction(credentials);
 
-        // Mock validation
-        if (
-          credentials.username === "admin" &&
-          credentials.password === "password"
-        ) {
-          const mockUser: User = {
-            id: "1",
-            username: credentials.username,
-            email: "admin@example.com",
-            firstName: "Admin",
-            lastName: "User",
-            avatar: null,
-            role: "admin",
-            isEmailVerified: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          };
-
-          const mockToken = "mock-jwt-token-12345";
-
-          // Save to storage
-          await saveAuthToken(mockToken);
-          await saveUserData(mockUser);
-
+        if (success) {
           return {
             success: true,
-            user: mockUser,
-            token: mockToken,
             message: SUCCESS_MESSAGES.AUTH.LOGIN_SUCCESS,
+            data: null,
           };
         } else {
-          throw new Error(ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS);
+          return {
+            success: false,
+            message: error || "Login failed",
+            data: null,
+          };
         }
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : ERROR_MESSAGES.AUTH.LOGIN_FAILED;
-        setError(errorMessage);
-
+          err instanceof Error ? err.message : "Login failed";
         return {
           success: false,
-          error: errorMessage,
+          message: errorMessage,
+          data: null,
         };
-      } finally {
-        setIsLoading(false);
       }
     },
-    []
+    [loginAction, error]
   );
 
   /**
-   * Register user baru
+   * Register user with credentials
    * @param credentials - Register credentials
-   * @returns Promise dengan user data atau error
+   * @returns Promise with AuthResponse format
    */
   const register = useCallback(
     async (credentials: RegisterCredentials): Promise<AuthResponse> => {
-      setIsLoading(true);
-      setError(null);
-
       try {
-        // Simulate API call - replace dengan actual API call
-        await delay(2000);
+        const success = await registerAction(credentials);
 
-        // Mock validation
-        if (credentials.email && credentials.password && credentials.username) {
-          const mockUser: User = {
-            id: Date.now().toString(),
-            username: credentials.username,
-            email: credentials.email,
-            firstName: credentials.firstName || "",
-            lastName: credentials.lastName || "",
-            avatar: null,
-            role: "user",
-            isEmailVerified: false,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          };
-
-          const mockToken = `mock-jwt-token-${Date.now()}`;
-
-          // Save to storage
-          await saveAuthToken(mockToken);
-          await saveUserData(mockUser);
-
+        if (success) {
           return {
             success: true,
-            user: mockUser,
-            token: mockToken,
             message: SUCCESS_MESSAGES.AUTH.REGISTER_SUCCESS,
+            data: null,
           };
         } else {
-          throw new Error(ERROR_MESSAGES.AUTH.INVALID_INPUT);
+          return {
+            success: false,
+            message: error || "Registration failed",
+            data: null,
+          };
         }
       } catch (err) {
         const errorMessage =
-          err instanceof Error
-            ? err.message
-            : ERROR_MESSAGES.AUTH.REGISTER_FAILED;
-        setError(errorMessage);
-
+          err instanceof Error ? err.message : "Registration failed";
         return {
           success: false,
-          error: errorMessage,
+          message: errorMessage,
+          data: null,
         };
-      } finally {
-        setIsLoading(false);
       }
     },
-    []
+    [registerAction, error]
   );
 
   /**
    * Logout user
-   * @returns Promise
+   * @returns Promise with AuthResponse format
    */
-  const logout = useCallback(async (): Promise<void> => {
-    setIsLoading(true);
-    setError(null);
-
+  const logout = useCallback(async (): Promise<AuthResponse> => {
     try {
-      // Simulate API call untuk logout - replace dengan actual API call
-      await delay(500);
-
-      // Clear storage
-      await clearAuthData();
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : ERROR_MESSAGES.AUTH.LOGOUT_FAILED;
-      setError(errorMessage);
-      console.error("Logout error:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  /**
-   * Refresh authentication token
-   * @returns Promise dengan user data atau error
-   */
-  const refreshToken = useCallback(async (): Promise<AuthResponse> => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // Simulate API call - replace dengan actual API call
-      await delay(1000);
-
-      // Mock refresh token logic
-      const newToken = `refreshed-token-${Date.now()}`;
-      await saveAuthToken(newToken);
-
+      await logoutAction();
       return {
         success: true,
-        token: newToken,
-        message: "Token refreshed successfully",
+        message: SUCCESS_MESSAGES.AUTH.LOGOUT_SUCCESS,
+        data: null,
       };
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to refresh token";
-      setError(errorMessage);
-
+      const errorMessage = err instanceof Error ? err.message : "Logout failed";
       return {
         success: false,
-        error: errorMessage,
+        message: errorMessage,
+        data: null,
       };
-    } finally {
-      setIsLoading(false);
     }
-  }, []);
+  }, [logoutAction]);
 
   /**
    * Forgot password
-   * @param email - Email untuk reset password
-   * @returns Promise
+   * @param email - Email address
+   * @returns Promise with AuthResponse format
    */
   const forgotPassword = useCallback(
     async (email: string): Promise<AuthResponse> => {
-      setIsLoading(true);
-      setError(null);
-
       try {
-        // Simulate API call - replace dengan actual API call
-        await delay(1500);
+        const success = await forgotPasswordAction(email);
 
-        // Mock forgot password logic
-        if (email) {
+        if (success) {
           return {
             success: true,
-            message: "Password reset link sent to your email",
+            message: "Password reset link has been sent to your email",
+            data: null,
           };
         } else {
-          throw new Error("Email is required");
+          return {
+            success: false,
+            message: error || "Failed to send reset email",
+            data: null,
+          };
         }
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "Failed to send reset email";
-        setError(errorMessage);
-
         return {
           success: false,
-          error: errorMessage,
+          message: errorMessage,
+          data: null,
         };
-      } finally {
-        setIsLoading(false);
       }
     },
-    []
-  );
-
-  /**
-   * Reset password
-   * @param token - Reset token
-   * @param newPassword - Password baru
-   * @returns Promise
-   */
-  const resetPassword = useCallback(
-    async (token: string, newPassword: string): Promise<AuthResponse> => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        // Simulate API call - replace dengan actual API call
-        await delay(1500);
-
-        // Mock reset password logic
-        if (token && newPassword) {
-          return {
-            success: true,
-            message: "Password reset successfully",
-          };
-        } else {
-          throw new Error("Invalid reset token or password");
-        }
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Failed to reset password";
-        setError(errorMessage);
-
-        return {
-          success: false,
-          error: errorMessage,
-        };
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    []
+    [forgotPasswordAction, error]
   );
 
   return {
+    // State
+    user,
+    isAuthenticated,
     isLoading,
     error,
+    isInitialized,
+
+    // Actions
     login,
     register,
     logout,
-    refreshToken,
     forgotPassword,
-    resetPassword,
     clearError,
+    initializeAuth,
   };
+};
+
+/**
+ * Hook to check if user is logged in
+ * @returns boolean - true if user is logged in
+ */
+export const useIsAuthenticated = (): boolean => {
+  return useAuthStore(authSelectors.isAuthenticated);
+};
+
+/**
+ * Hook to get user data
+ * @returns User data or null
+ */
+export const useUser = () => {
+  return useAuthStore(authSelectors.user);
+};
+
+/**
+ * Hook to get loading state
+ * @returns boolean - true if loading
+ */
+export const useAuthLoading = (): boolean => {
+  return useAuthStore(authSelectors.isLoading);
+};
+
+/**
+ * Hook to get error state
+ * @returns Error message or null
+ */
+export const useAuthError = (): string | null => {
+  return useAuthStore(authSelectors.error);
 };

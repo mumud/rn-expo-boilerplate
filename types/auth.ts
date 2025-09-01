@@ -1,6 +1,6 @@
 /**
  * Authentication related types and interfaces
- * Berisi semua type definitions untuk sistem authentication
+ * Contains all type definitions for authentication system
  */
 
 export interface User {
@@ -45,15 +45,21 @@ export interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<boolean>;
   register: (credentials: RegisterCredentials) => Promise<boolean>;
   logout: () => Promise<void>;
+  forgotPassword: (email: string) => Promise<boolean>;
+  resetPassword: (token: string, password: string) => Promise<boolean>;
+  updateProfile: (data: Partial<User>) => Promise<boolean>;
+  refreshToken: () => Promise<boolean>;
+  checkAuthStatus: () => Promise<void>;
   clearError: () => void;
 }
 
 export interface AuthResponse {
   success: boolean;
-  user?: User;
+  user?: User | null;
   token?: string;
   message?: string;
   error?: string;
+  data?: any;
 }
 
 export type AuthAction =
@@ -63,6 +69,9 @@ export type AuthAction =
   | { type: "REGISTER_START" }
   | { type: "REGISTER_SUCCESS"; payload: User }
   | { type: "REGISTER_FAILURE"; payload: string }
+  | { type: "FORGOT_PASSWORD_START" }
+  | { type: "FORGOT_PASSWORD_SUCCESS" }
+  | { type: "FORGOT_PASSWORD_FAILURE"; payload: string }
   | { type: "LOGOUT" }
   | { type: "CLEAR_ERROR" }
   | { type: "SET_LOADING"; payload: boolean };

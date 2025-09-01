@@ -1,6 +1,6 @@
 /**
  * Common types and interfaces
- * Berisi semua type definitions yang umum digunakan di seluruh aplikasi
+ * Contains all common type definitions used throughout the application
  */
 
 // Generic API Response
@@ -33,16 +33,16 @@ export interface AppError {
   timestamp: string;
 }
 
-export type ErrorType = 
-  | 'NETWORK_ERROR'
-  | 'VALIDATION_ERROR'
-  | 'AUTHENTICATION_ERROR'
-  | 'AUTHORIZATION_ERROR'
-  | 'SERVER_ERROR'
-  | 'UNKNOWN_ERROR';
+export type ErrorType =
+  | "NETWORK_ERROR"
+  | "VALIDATION_ERROR"
+  | "AUTHENTICATION_ERROR"
+  | "AUTHORIZATION_ERROR"
+  | "SERVER_ERROR"
+  | "UNKNOWN_ERROR";
 
 // Theme Types
-export type ColorScheme = 'light' | 'dark' | 'system';
+export type ColorScheme = "light" | "dark" | "system";
 
 export interface ThemeColors {
   background: string;
@@ -71,7 +71,7 @@ export interface PaginationParams {
   page: number;
   limit: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
   search?: string;
 }
 
@@ -89,18 +89,19 @@ export interface PaginatedResponse<T> {
 
 // Storage Keys
 export enum StorageKeys {
-  AUTH_TOKEN = 'auth_token',
-  USER_DATA = 'user_data',
-  THEME = 'theme',
-  LANGUAGE = 'language',
-  ONBOARDING_COMPLETED = 'onboarding_completed',
-  BIOMETRIC_ENABLED = 'biometric_enabled',
+  AUTH_TOKEN = "auth_token",
+  USER_DATA = "user_data",
+  THEME = "theme",
+  LANGUAGE = "language",
+  ONBOARDING_COMPLETED = "onboarding_completed",
+  BIOMETRIC_ENABLED = "biometric_enabled",
+  REFRESH_TOKEN = "refresh_token",
 }
 
 // App States
-export type AppState = 'active' | 'background' | 'inactive';
+export type AppState = "active" | "background" | "inactive";
 
-export type NetworkState = 'connected' | 'disconnected' | 'unknown';
+export type NetworkState = "connected" | "disconnected" | "unknown";
 
 // Generic Callback Types
 export type VoidCallback = () => void;
@@ -123,8 +124,8 @@ export interface BaseComponentProps {
 }
 
 // Date and Time
-export type DateFormat = 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD';
-export type TimeFormat = '12h' | '24h';
+export type DateFormat = "DD/MM/YYYY" | "MM/DD/YYYY" | "YYYY-MM-DD";
+export type TimeFormat = "12h" | "24h";
 
 // File Upload
 export interface FileUpload {

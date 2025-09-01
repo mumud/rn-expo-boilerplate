@@ -1,44 +1,33 @@
 import { Tabs } from "expo-router";
 import { HomeIcon, User2Icon } from "lucide-react-native";
 import { Platform } from "react-native";
-import Animated, {
-  FadeInUp,
-  FadeOutDown,
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  interpolate,
-} from "react-native-reanimated";
-import * as Haptics from "expo-haptics";
+import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
 import React from "react";
+import { useThemeStore } from "@/stores/themeStore";
 
 export default function TabLayout() {
-  // Fungsi untuk haptic feedback saat tab berubah
-  const handleTabPress = () => {
-    if (Platform.OS === "ios") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    }
-  };
+  // Menggunakan theme store untuk mendapatkan warna tema
+  const { colors, isDark } = useThemeStore();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#007AFF",
-        tabBarInactiveTintColor: "#8E8E93",
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textMuted,
         tabBarStyle: {
-          backgroundColor: "white",
+          backgroundColor: colors.card,
           borderTopWidth: 0.5,
-          borderTopColor: "#E5E5E7",
+          borderTopColor: colors.border,
           paddingBottom: Platform.OS === "ios" ? 20 : 5,
           paddingTop: 5,
           height: Platform.OS === "ios" ? 85 : 60,
           elevation: 8,
-          shadowColor: "#000",
+          shadowColor: isDark ? colors.text : "#000",
           shadowOffset: {
             width: 0,
             height: -2,
           },
-          shadowOpacity: 0.1,
+          shadowOpacity: isDark ? 0.3 : 0.1,
           shadowRadius: 3,
         },
         tabBarLabelStyle: {
@@ -54,13 +43,13 @@ export default function TabLayout() {
           return (
             <Animated.View style={[{ flex: 1 }]}>
               {props.children &&
-                React.cloneElement(props.children as React.ReactElement, {
-                  ...props,
-                  onPress: (e: any) => {
-                    handleTabPress();
-                    props.onPress?.(e);
-                  },
-                })}
+                React.cloneElement(
+                  props.children as React.ReactElement<any>,
+                  {
+                    ...props,
+                    onPress: (e: any) => props.onPress?.(e),
+                  } as any
+                )}
             </Animated.View>
           );
         },

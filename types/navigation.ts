@@ -1,6 +1,6 @@
 /**
  * Navigation related types
- * Berisi semua type definitions untuk navigation dan routing
+ * Contains all type definitions for navigation and routing
  */
 
 import { Href } from "expo-router";
@@ -16,6 +16,7 @@ export type RootStackParamList = {
   modal: { title?: string; content?: string };
   profile: { userId: string };
   settings: undefined;
+  notifications: undefined;
 };
 
 // Tab Navigator
@@ -23,7 +24,6 @@ export type TabParamList = {
   index: undefined;
   account: undefined;
   explore: undefined;
-  notifications: undefined;
 };
 
 // Auth Stack Navigator
@@ -58,11 +58,11 @@ export type RouteParams = Record<string, string | number | boolean | undefined>;
 // Navigation State
 export interface NavigationState {
   index: number;
-  routes: Array<{
+  routes: {
     key: string;
     name: string;
     params?: object;
-  }>;
+  }[];
 }
 
 // Deep Link Types

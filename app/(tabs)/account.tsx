@@ -1,6 +1,6 @@
 /**
  * Account Screen
- * Halaman profil dan pengaturan akun user
+ * User profile and account settings page
  */
 
 import React, { useState } from "react";
@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
-import { useAuth } from "@/contexts/AuthProvider";
+import { useAuth } from "@/hooks/useAuth";
 import {
   UserIcon,
   BellIcon,
@@ -29,8 +29,10 @@ import {
   CreditCardIcon,
 } from "@/components/ui/icons";
 import { APP_CONFIG } from "@/constants";
+import { useColorScheme } from "nativewind";
+import { useThemeStore } from "@/stores";
 
-// Interface untuk menu item
+// Interface for menu item
 interface AccountMenuItem {
   id: string;
   title: string;
@@ -41,7 +43,7 @@ interface AccountMenuItem {
   rightComponent?: React.ReactNode;
 }
 
-// Interface untuk user profile
+// Interface for user profile
 interface UserProfile {
   name: string;
   email: string;
@@ -52,8 +54,9 @@ interface UserProfile {
 
 export default function Account() {
   const insets = useSafeAreaInsets();
+  const { setColorScheme } = useColorScheme();
+  const { setMode, mode } = useThemeStore();
   const { user, logout } = useAuth();
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,12 +69,12 @@ export default function Account() {
   };
 
   /**
-   * Handle logout dengan konfirmasi
+   * Handle logout with confirmation
    */
   const handleLogout = () => {
-    Alert.alert("Logout", "Apakah Anda yakin ingin keluar dari akun?", [
+    Alert.alert("Logout", "Are you sure you want to logout from your account?", [
       {
-        text: "Batal",
+        text: "Cancel",
         style: "cancel",
       },
       {
@@ -82,7 +85,8 @@ export default function Account() {
             setIsLoading(true);
             await logout();
           } catch (error) {
-            Alert.alert("Error", "Gagal logout. Silakan coba lagi.");
+            console.error(error);
+            Alert.alert("Error", "Failed to logout. Please try again.");
           } finally {
             setIsLoading(false);
           }
@@ -95,12 +99,8 @@ export default function Account() {
    * Handle toggle dark mode
    */
   const handleDarkModeToggle = (value: boolean) => {
-    setIsDarkMode(value);
-    // TODO: Implement actual dark mode logic
-    Alert.alert(
-      "Dark Mode",
-      value ? "Dark mode diaktifkan" : "Dark mode dinonaktifkan"
-    );
+    setColorScheme(value ? "dark" : "light");
+    setMode(value ? "dark" : "light");
   };
 
   /**
@@ -109,8 +109,8 @@ export default function Account() {
   const handleNotificationsToggle = (value: boolean) => {
     setNotificationsEnabled(value);
     Alert.alert(
-      "Notifikasi",
-      value ? "Notifikasi diaktifkan" : "Notifikasi dinonaktifkan"
+      "Notifications",
+      value ? "Notifications enabled" : "Notifications disabled"
     );
   };
 
@@ -120,16 +120,16 @@ export default function Account() {
   const handleMenuPress = (menuId: string) => {
     switch (menuId) {
       case "edit-profile":
-        Alert.alert("Edit Profile", "Fitur edit profile akan segera hadir!");
+        Alert.alert("Edit Profile", "Edit profile feature coming soon!");
         break;
       case "billing":
-        Alert.alert("Billing", "Fitur billing akan segera hadir!");
+        Alert.alert("Billing", "Billing feature coming soon!");
         break;
       case "help":
-        Alert.alert("Help & Support", "Fitur help akan segera hadir!");
+        Alert.alert("Help & Support", "Help feature coming soon!");
         break;
       case "contact":
-        Alert.alert("Contact Us", "Fitur contact akan segera hadir!");
+        Alert.alert("Contact Us", "Contact feature coming soon!");
         break;
       default:
         break;
@@ -141,7 +141,7 @@ export default function Account() {
     {
       id: "edit-profile",
       title: "Edit Profile",
-      subtitle: "Update informasi profil Anda",
+      subtitle: "Update your profile information",
       icon: UserIcon,
       onPress: () => handleMenuPress("edit-profile"),
       showArrow: true,
@@ -149,15 +149,15 @@ export default function Account() {
     {
       id: "billing",
       title: "Billing & Subscription",
-      subtitle: "Kelola pembayaran dan langganan",
+      subtitle: "Manage payments and subscriptions",
       icon: CreditCardIcon,
       onPress: () => handleMenuPress("billing"),
       showArrow: true,
     },
     {
       id: "notifications",
-      title: "Notifikasi",
-      subtitle: "Atur preferensi notifikasi",
+      title: "Notifications",
+      subtitle: "Set notification preferences",
       icon: BellIcon,
       onPress: () => {},
       rightComponent: (
@@ -172,22 +172,22 @@ export default function Account() {
     {
       id: "dark-mode",
       title: "Dark Mode",
-      subtitle: "Ubah tema aplikasi",
-      icon: isDarkMode ? MoonStarIcon : SunIcon,
+      subtitle: "Change app theme",
+      icon: mode === "dark" ? MoonStarIcon : SunIcon,
       onPress: () => {},
       rightComponent: (
         <Switch
-          value={isDarkMode}
+          value={mode === "dark"}
           onValueChange={handleDarkModeToggle}
           trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isDarkMode ? "#f5dd4b" : "#f4f3f4"}
+          thumbColor={mode === "dark" ? "#f5dd4b" : "#f4f3f4"}
         />
       ),
     },
     {
       id: "help",
       title: "Help & Support",
-      subtitle: "Bantuan dan dukungan pelanggan",
+      subtitle: "Help and customer support",
       icon: HelpCircleIcon,
       onPress: () => handleMenuPress("help"),
       showArrow: true,
@@ -195,7 +195,7 @@ export default function Account() {
     {
       id: "contact",
       title: "Contact Us",
-      subtitle: "Hubungi tim support",
+      subtitle: "Contact support team",
       icon: MailIcon,
       onPress: () => handleMenuPress("contact"),
       showArrow: true,
@@ -217,7 +217,7 @@ export default function Account() {
           Account
         </Text>
         <Text className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
-          Kelola profil dan pengaturan akun Anda
+          Manage your profile and account settings
         </Text>
       </View>
 

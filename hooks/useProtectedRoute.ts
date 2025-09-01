@@ -1,19 +1,18 @@
 /**
  * useProtectedRoute hook
- * Custom hook untuk mengelola protected routes dan navigation
+ * Custom hook to manage protected routes and navigation
  */
 
 import { useEffect } from "react";
 import { router, useSegments } from "expo-router";
 import type { User } from "@/types";
-import { ROUTES } from "@/constants";
-import { useCallback } from "react";
+import { ROUTES, NAVIGATION_CONFIG } from "@/constants";
 
 /**
- * Custom hook untuk mengelola protected routes
- * Redirect user ke halaman yang sesuai berdasarkan authentication status
- * @param user - User object atau null
- * @param isLoading - Loading state untuk authentication
+ * Custom hook to manage protected routes
+ * Redirect user to appropriate page based on authentication status
+ * @param user - User object or null
+ * @param isLoading - Loading state for authentication
  */
 export const useProtectedRoute = (
   user: User | null,
@@ -22,7 +21,7 @@ export const useProtectedRoute = (
   const segments = useSegments();
 
   useEffect(() => {
-    // Jangan redirect jika masih loading
+    // Don't redirect if still loading
     if (isLoading) {
       return;
     }
@@ -30,20 +29,24 @@ export const useProtectedRoute = (
     const inAuthGroup = segments[0] === "(auth)";
     const inTabsGroup = segments[0] === "(tabs)";
 
-    // Jika user tidak login dan tidak di halaman auth, redirect ke signin
+    // If user is not logged in and not on auth page, redirect to signin
     if (!user && !inAuthGroup) {
       router.replace(ROUTES.AUTH.SIGNIN);
       return;
     }
 
-    // Jika user sudah login dan masih di halaman auth, redirect ke home
+    // If user is logged in and still on auth page, redirect to home
     if (user && inAuthGroup) {
       router.replace(ROUTES.TABS.HOME as any);
       return;
     }
 
-    // Jika user sudah login tapi tidak di tabs atau auth, redirect ke home
-    if (user && !inTabsGroup && !inAuthGroup) {
+    // List of allowed pages for logged in users
+    const allowedPages = NAVIGATION_CONFIG.ALLOWED_PAGES;
+    const currentPage = segments[segments.length - 1];
+    
+    // If user is logged in but not on tabs, auth, or allowed pages, redirect to home
+    if (user && !inTabsGroup && !inAuthGroup && !allowedPages.includes(currentPage as string)) {
       router.replace(ROUTES.TABS.HOME as any);
       return;
     }
@@ -51,35 +54,35 @@ export const useProtectedRoute = (
 };
 
 /**
- * Hook untuk cek apakah user bisa mengakses route tertentu
- * @param user - User object atau null
- * @param requiredRole - Role yang dibutuhkan (optional)
- * @returns Boolean apakah user bisa mengakses
+ * Hook to check if user can access specific route
+ * @param user - User object or null
+ * @param requiredRole - Required role (optional)
+ * @returns Boolean whether user can access
  */
 export const useCanAccess = (
   user: User | null,
   requiredRole?: string
 ): boolean => {
-  // Jika tidak ada user, tidak bisa akses
+  // If no user, cannot access
   if (!user) {
     return false;
   }
 
-  // Jika tidak ada required role, user yang login bisa akses
+  // If no required role, logged in user can access
   if (!requiredRole) {
     return true;
   }
 
   // TODO: Implement role-based access control
-  // Untuk sekarang, semua user yang login bisa akses
+  // For now, all logged in users can access
   return true;
 };
 
 /**
- * Hook untuk redirect ke halaman tertentu dengan kondisi
- * @param condition - Kondisi untuk redirect
- * @param redirectTo - Halaman tujuan redirect
- * @param replace - Apakah menggunakan replace atau push
+ * Hook to redirect to specific page with condition
+ * @param condition - Condition for redirect
+ * @param redirectTo - Target redirect page
+ * @param replace - Whether to use replace or push
  */
 export const useConditionalRedirect = (
   condition: boolean,
@@ -98,17 +101,17 @@ export const useConditionalRedirect = (
 };
 
 /**
- * Hook untuk mengelola navigation state
+ * Hook to manage navigation state
  * @returns Navigation utilities
  */
 export const useNavigation = () => {
   const segments = useSegments();
 
   /**
-   * Navigate ke halaman tertentu
-   * @param route - Route tujuan
-   * @param params - Parameters untuk route
-   * @param replace - Apakah menggunakan replace
+   * Navigate to specific page
+   * @param route - Target route
+   * @param params - Parameters for route
+   * @param replace - Whether to use replace
    */
   const navigateTo = (
     route: string,
@@ -127,41 +130,41 @@ export const useNavigation = () => {
   };
 
   /**
-   * Go back ke halaman sebelumnya
+   * Go back to previous page
    */
   const goBack = () => {
     if (router.canGoBack()) {
       router.back();
     } else {
-      // Fallback ke home jika tidak bisa go back
-      router.replace(ROUTES.TABS.HOME as any);
+      // Fallback to home if cannot go back
+      router.replace(ROUTES.TABS.HOME);
     }
   };
 
   /**
-   * Navigate ke home
+   * Navigate to home
    */
   const goToHome = () => {
     router.replace(ROUTES.TABS.HOME);
   };
 
   /**
-   * Navigate ke signin
+   * Navigate to signin
    */
   const goToSignin = () => {
     router.replace(ROUTES.AUTH.SIGNIN);
   };
 
   /**
-   * Navigate ke signup
+   * Navigate to signup
    */
   const goToSignup = () => {
     router.replace(ROUTES.AUTH.SIGNUP);
   };
 
   /**
-   * Cek apakah sedang di route tertentu
-   * @param route - Route yang dicek
+   * Check if currently on specific route
+   * @param route - Route to check
    * @returns Boolean
    */
   const isCurrentRoute = (route: string): boolean => {

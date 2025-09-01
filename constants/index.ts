@@ -15,4 +15,5 @@ export {
   ERROR_MESSAGES,
   SUCCESS_MESSAGES,
   ROUTES,
+  NAVIGATION_CONFIG,
 } from "./app";

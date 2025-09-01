@@ -1,6 +1,6 @@
 /**
  * Form validation and UI related types
- * Berisi semua type definitions untuk form handling dan validasi
+ * Contains all type definitions for form handling and validation
  */
 
 export interface FormField {

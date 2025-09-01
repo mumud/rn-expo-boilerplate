@@ -1,18 +1,21 @@
 /**
  * Form validation utilities
- * Berisi semua utility functions untuk validasi form
+ * Contains all utility functions for form validation
  */
 
-import { VALIDATION_RULES, ERROR_MESSAGES } from '@/constants';
-import type { ValidationRule, FormErrors } from '@/types';
+import { VALIDATION_RULES, ERROR_MESSAGES } from "@/constants";
+import type { ValidationRule, FormErrors } from "@/types";
 
 /**
- * Validasi field berdasarkan rules yang diberikan
- * @param value - Nilai yang akan divalidasi
- * @param rules - Array rules validasi
- * @returns Error message atau null jika valid
+ * Validate field based on given rules
+ * @param value - Value to be validated
+ * @param rules - Array of validation rules
+ * @returns Error message or null if valid
  */
-export const validateField = (value: string, rules: ValidationRule[]): string | null => {
+export const validateField = (
+  value: string,
+  rules: ValidationRule[]
+): string | null => {
   for (const rule of rules) {
     // Required validation
     if (rule.required && (!value || value.trim().length === 0)) {
@@ -26,17 +29,17 @@ export const validateField = (value: string, rules: ValidationRule[]): string | 
 
     // Min length validation
     if (rule.minLength && value.length < rule.minLength) {
-      return rule.message || `Minimal ${rule.minLength} karakter.`;
+      return rule.message || `Minimum ${rule.minLength} characters.`;
     }
 
     // Max length validation
     if (rule.maxLength && value.length > rule.maxLength) {
-      return rule.message || `Maksimal ${rule.maxLength} karakter.`;
+      return rule.message || `Maximum ${rule.maxLength} characters.`;
     }
 
     // Pattern validation
     if (rule.pattern && !rule.pattern.test(value)) {
-      return rule.message || 'Format tidak valid.';
+      return rule.message || "Invalid format.";
     }
 
     // Custom validation
@@ -52,57 +55,72 @@ export const validateField = (value: string, rules: ValidationRule[]): string | 
 };
 
 /**
- * Validasi username
- * @param username - Username yang akan divalidasi
- * @returns Error message atau null jika valid
+ * Validate username
+ * @param username - Username to be validated
+ * @returns Error message or null if valid
  */
 export const validateUsername = (username: string): string | null => {
   const rules: ValidationRule[] = [
     { required: true },
     { minLength: VALIDATION_RULES.USERNAME.MIN_LENGTH },
     { maxLength: VALIDATION_RULES.USERNAME.MAX_LENGTH },
-    { pattern: VALIDATION_RULES.USERNAME.PATTERN, message: 'Username hanya boleh mengandung huruf, angka, dan underscore.' },
+    {
+      pattern: VALIDATION_RULES.USERNAME.PATTERN,
+      message: "Username can only contain letters, numbers, and underscores.",
+    },
   ];
 
   return validateField(username, rules);
 };
 
 /**
- * Validasi email
- * @param email - Email yang akan divalidasi
- * @returns Error message atau null jika valid
+ * Validate email
+ * @param email - Email to be validated
+ * @returns Error message or null if valid
  */
 export const validateEmail = (email: string): string | null => {
   const rules: ValidationRule[] = [
     { required: true },
-    { pattern: VALIDATION_RULES.EMAIL.PATTERN, message: ERROR_MESSAGES.VALIDATION.INVALID_EMAIL },
+    {
+      pattern: VALIDATION_RULES.EMAIL.PATTERN,
+      message: ERROR_MESSAGES.VALIDATION.INVALID_EMAIL,
+    },
   ];
 
   return validateField(email, rules);
 };
 
 /**
- * Validasi password
- * @param password - Password yang akan divalidasi
- * @returns Error message atau null jika valid
+ * Validate password
+ * @param password - Password to be validated
+ * @returns Error message or null if valid
  */
 export const validatePassword = (password: string): string | null => {
   const rules: ValidationRule[] = [
     { required: true },
-    { minLength: VALIDATION_RULES.PASSWORD.MIN_LENGTH, message: ERROR_MESSAGES.VALIDATION.PASSWORD_TOO_SHORT },
-    { pattern: VALIDATION_RULES.PASSWORD.PATTERN, message: ERROR_MESSAGES.VALIDATION.PASSWORD_TOO_WEAK },
+    {
+      minLength: VALIDATION_RULES.PASSWORD.MIN_LENGTH,
+      message: ERROR_MESSAGES.VALIDATION.PASSWORD_TOO_SHORT,
+    },
+    {
+      pattern: VALIDATION_RULES.PASSWORD.PATTERN,
+      message: ERROR_MESSAGES.VALIDATION.PASSWORD_TOO_WEAK,
+    },
   ];
 
   return validateField(password, rules);
 };
 
 /**
- * Validasi konfirmasi password
- * @param password - Password asli
- * @param confirmPassword - Konfirmasi password
- * @returns Error message atau null jika valid
+ * Validate password confirmation
+ * @param password - Original password
+ * @param confirmPassword - Password confirmation
+ * @returns Error message or null if valid
  */
-export const validateConfirmPassword = (password: string, confirmPassword: string): string | null => {
+export const validateConfirmPassword = (
+  password: string,
+  confirmPassword: string
+): string | null => {
   const rules: ValidationRule[] = [
     { required: true },
     {
@@ -119,24 +137,27 @@ export const validateConfirmPassword = (password: string, confirmPassword: strin
 };
 
 /**
- * Validasi nomor telepon
- * @param phone - Nomor telepon yang akan divalidasi
- * @returns Error message atau null jika valid
+ * Validate phone number
+ * @param phone - Phone number to be validated
+ * @returns Error message or null if valid
  */
 export const validatePhone = (phone: string): string | null => {
   const rules: ValidationRule[] = [
     { required: true },
-    { pattern: VALIDATION_RULES.PHONE.PATTERN, message: ERROR_MESSAGES.VALIDATION.INVALID_PHONE },
+    {
+      pattern: VALIDATION_RULES.PHONE.PATTERN,
+      message: ERROR_MESSAGES.VALIDATION.INVALID_PHONE,
+    },
   ];
 
   return validateField(phone, rules);
 };
 
 /**
- * Validasi form secara keseluruhan
- * @param values - Object berisi nilai-nilai form
- * @param validationRules - Object berisi rules validasi untuk setiap field
- * @returns Object berisi errors untuk setiap field
+ * Validate entire form
+ * @param values - Object containing form values
+ * @param validationRules - Object containing validation rules for each field
+ * @returns Object containing errors for each field
  */
 export const validateForm = (
   values: Record<string, string>,
@@ -145,7 +166,7 @@ export const validateForm = (
   const errors: FormErrors = {};
 
   Object.keys(validationRules).forEach((fieldName) => {
-    const value = values[fieldName] || '';
+    const value = values[fieldName] || "";
     const rules = validationRules[fieldName];
     const error = validateField(value, rules);
     errors[fieldName] = error;
@@ -155,27 +176,29 @@ export const validateForm = (
 };
 
 /**
- * Cek apakah form valid (tidak ada error)
- * @param errors - Object berisi errors
- * @returns True jika form valid, false jika ada error
+ * Check if form is valid (no errors)
+ * @param errors - Object containing errors
+ * @returns True if form is valid, false if there are errors
  */
 export const isFormValid = (errors: FormErrors): boolean => {
   return Object.values(errors).every((error) => error === null);
 };
 
 /**
- * Cek apakah ada field yang sudah disentuh
- * @param touched - Object berisi status touched untuk setiap field
- * @returns True jika ada field yang sudah disentuh
+ * Check if any field has been touched
+ * @param touched - Object containing touched status for each field
+ * @returns True if any field has been touched
  */
-export const hasAnyFieldTouched = (touched: Record<string, boolean>): boolean => {
+export const hasAnyFieldTouched = (
+  touched: Record<string, boolean>
+): boolean => {
   return Object.values(touched).some((isTouched) => isTouched);
 };
 
 /**
- * Cek kekuatan password
- * @param password - Password yang akan dicek
- * @returns Score kekuatan password (0-4)
+ * Check password strength
+ * @param password - Password to be checked
+ * @returns Password strength score (0-4)
  */
 export const getPasswordStrength = (password: string): number => {
   let score = 0;
@@ -192,19 +215,19 @@ export const getPasswordStrength = (password: string): number => {
 /**
  * Get password strength label
  * @param strength - Password strength score
- * @returns Label kekuatan password
+ * @returns Password strength label
  */
 export const getPasswordStrengthLabel = (strength: number): string => {
-  const labels = ['Sangat Lemah', 'Lemah', 'Sedang', 'Kuat', 'Sangat Kuat'];
+  const labels = ["Very Weak", "Weak", "Medium", "Strong", "Very Strong"];
   return labels[strength] || labels[0];
 };
 
 /**
  * Get password strength color
  * @param strength - Password strength score
- * @returns Warna untuk indikator kekuatan password
+ * @returns Color for password strength indicator
  */
 export const getPasswordStrengthColor = (strength: number): string => {
-  const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#16a34a'];
+  const colors = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#16a34a"];
   return colors[strength] || colors[0];
 };

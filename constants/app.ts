@@ -164,6 +164,7 @@ export const SUCCESS_MESSAGES = {
     LOGOUT_SUCCESS: "Logout berhasil!",
     REGISTER_SUCCESS: "Registrasi berhasil!",
     PASSWORD_CHANGED: "Password berhasil diubah!",
+    FORGOT_PASSWORD_SUCCESS: "Kode reset password telah dikirimkan!",
   },
   GENERAL: {
     SAVE_SUCCESS: "Data berhasil disimpan!",
@@ -186,10 +187,16 @@ export const ROUTES = {
     HOME: "/(tabs)",
     ACCOUNT: "/(tabs)/account",
     EXPLORE: "/(tabs)/explore",
-    NOTIFICATIONS: "/(tabs)/notifications",
   },
   MODAL: {
     PROFILE: "/modal/profile",
-    SETTINGS: "/modal/settings",
+    SETTINGS: "/modal/setting",
   },
+  NOTIFICATIONS: "/notification",
+} as const;
+
+// Navigation Configuration
+export const NAVIGATION_CONFIG = {
+  // Halaman yang diizinkan untuk user yang sudah login (di luar tabs dan auth)
+  ALLOWED_PAGES: ["notification", "profile", "settings"] as readonly string[],
 } as const;

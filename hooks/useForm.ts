@@ -4,7 +4,7 @@
  */
 
 import { useState, useCallback, useMemo } from 'react';
-import type { UseFormOptions, UseFormReturn, FormValidationRules, FormErrors, FormTouched } from '@/types';
+import type { UseFormOptions, UseFormReturn, FormErrors, FormTouched } from '@/types';
 import { validateForm, isFormValid } from '@/utils';
 
 /**
@@ -37,11 +37,14 @@ export const useForm = (options: UseFormOptions): UseFormReturn => {
       setValues((prev) => ({ ...prev, [field]: value }));
       
       // Clear error ketika user mulai mengetik
-      if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: null }));
-      }
+      setErrors((prev) => {
+        if (prev[field]) {
+          return { ...prev, [field]: null };
+        }
+        return prev;
+      });
     },
-    [errors]
+    []
   );
 
   /**

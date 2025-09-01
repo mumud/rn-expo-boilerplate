@@ -4,7 +4,7 @@
  */
 
 // Environment configuration
-export * from './env';
+export * from "./env";
 
 // Additional config exports bisa ditambahkan di sini
 // export * from './api';

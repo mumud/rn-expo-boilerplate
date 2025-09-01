@@ -33,6 +33,10 @@ import {
   AlertCircle,
   CheckCircle,
   HelpCircle,
+  Check,
+  X,
+  AlertTriangle,
+  Info,
 
   // Action icons
   RefreshCcw,
@@ -81,6 +85,10 @@ const icons = {
   AlertCircle,
   CheckCircle,
   HelpCircle,
+  Check,
+  X,
+  AlertTriangle,
+  Info,
 
   // Action icons
   RefreshCcw,
@@ -132,6 +140,10 @@ export const {
   AlertCircle: AlertCircleIcon,
   CheckCircle: CheckCircleIcon,
   HelpCircle: HelpCircleIcon,
+  Check: CheckIcon,
+  X: XMarkIcon,
+  AlertTriangle: ExclamationTriangleIcon,
+  Info: InformationCircleIcon,
 
   // Action icons
   RefreshCcw: RefreshCcwIcon,

@@ -44,7 +44,7 @@ module.exports = ({ config }) => {
       output: "static",
       favicon: "./assets/images/favicon.png",
     },
-    plugins: ["expo-router"],
+    plugins: ["expo-router", "expo-dev-client"],
     experiments: {
       typedRoutes: true,
     },

@@ -1,6 +1,6 @@
 /**
  * Utils barrel export
- * Export semua utilities dari folder utils untuk memudahkan import
+ * Export all utilities from utils folder for easier import
  */
 
 // Validation utilities

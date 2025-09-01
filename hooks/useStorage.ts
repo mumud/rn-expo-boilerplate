@@ -48,7 +48,7 @@ export const useStorage = <T>(
     };
 
     loadStoredValue();
-  }, [key]);
+  }, [key, initialValue]);
 
   /**
    * Set value ke storage dan update state
@@ -152,7 +152,7 @@ export const useArrayStorage = <T>(
   boolean,
   string | null
 ] => {
-  const [array, setArray, removeArray, isLoading, error] = useStorage(
+  const [array, setArray, , isLoading, error] = useStorage(
     key,
     initialValue
   );
@@ -230,7 +230,7 @@ export const useObjectStorage = <T extends Record<string, any>>(
   boolean,
   string | null
 ] => {
-  const [object, setObject, removeObject, isLoading, error] = useStorage(
+  const [object, setObject, , isLoading, error] = useStorage(
     key,
     initialValue
   );

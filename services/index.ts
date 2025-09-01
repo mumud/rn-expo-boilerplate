@@ -1,6 +1,6 @@
 /**
  * Services barrel export
- * Export semua service modules untuk memudahkan import
+ * Export all service modules for easier import
  */
 
 // API services
@@ -13,7 +13,7 @@
 // export * from './notifications';
 // export * from './storage';
 
-// Placeholder untuk development
+// Placeholder for development
 export const services = {
-  // Placeholder object untuk services yang akan ditambahkan
+  // Placeholder object for services to be added
 };

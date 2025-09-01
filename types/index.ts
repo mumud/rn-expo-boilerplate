@@ -1,6 +1,6 @@
 /**
  * Types barrel export
- * Export semua types dari folder types untuk memudahkan import
+ * Export all types from types folder for easier import
  */
 
 // Auth types
