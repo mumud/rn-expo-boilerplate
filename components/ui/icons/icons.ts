@@ -13,6 +13,7 @@ import {
   Bell,
   Search,
   SlidersHorizontal,
+  Home,
 
   // Theme icons
   Sun,
@@ -65,6 +66,7 @@ const icons = {
   Bell,
   Search,
   SlidersHorizontal,
+  Home,
 
   // Theme icons
   Sun,
@@ -120,6 +122,7 @@ export const {
   Bell: BellIcon,
   Search: SearchIcon,
   SlidersHorizontal: SlidersHorizontalIcon,
+  Home: HomeIcon,
 
   // Theme icons
   Sun: SunIcon,

@@ -67,6 +67,17 @@ interface HomeData {
     image: string;
     category: string;
   }[];
+  promotionalItems: {
+    id: number;
+    title: string;
+    description: string;
+    buttonText: string;
+    emoji: string;
+    gradientFrom: string;
+    gradientTo: string;
+    darkGradientFrom: string;
+    darkGradientTo: string;
+  }[];
 }
 
 // Interface for menu items
@@ -159,6 +170,52 @@ export default function Index() {
             description: "Learn how to boost your productivity with our app",
             image: "🚀",
             category: "Tips",
+          },
+        ],
+        promotionalItems: [
+          {
+            id: 1,
+            title: "🎉 Special Offer!",
+            description: "Get 30% off on premium features this month",
+            buttonText: "Learn More",
+            emoji: "🚀",
+            gradientFrom: "from-blue-500",
+            gradientTo: "to-purple-600",
+            darkGradientFrom: "dark:from-blue-600",
+            darkGradientTo: "dark:to-purple-700",
+          },
+          {
+            id: 2,
+            title: "💎 Premium Upgrade",
+            description: "Unlock all features with our premium plan",
+            buttonText: "Upgrade Now",
+            emoji: "⭐",
+            gradientFrom: "from-green-500",
+            gradientTo: "to-teal-600",
+            darkGradientFrom: "dark:from-green-600",
+            darkGradientTo: "dark:to-teal-700",
+          },
+          {
+            id: 3,
+            title: "🔥 Limited Time",
+            description: "Free trial extended for new users only",
+            buttonText: "Start Trial",
+            emoji: "⚡",
+            gradientFrom: "from-orange-500",
+            gradientTo: "to-red-600",
+            darkGradientFrom: "dark:from-orange-600",
+            darkGradientTo: "dark:to-red-700",
+          },
+          {
+            id: 4,
+            title: "🎁 Referral Bonus",
+            description: "Earn rewards by inviting your friends",
+            buttonText: "Invite Friends",
+            emoji: "🎊",
+            gradientFrom: "from-purple-500",
+            gradientTo: "to-pink-600",
+            darkGradientFrom: "dark:from-purple-600",
+            darkGradientTo: "dark:to-pink-700",
           },
         ],
       });
@@ -394,10 +451,10 @@ export default function Index() {
         />
       }
     >
-      <View className='min-h-full bg-neutral-50 dark:bg-gray-950 px-5'>
+      <View className='min-h-full bg-neutral-50 dark:bg-gray-950'>
         {/* Auth Error Banner */}
         {error && (
-          <View className='mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800'>
+          <View className='mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-md border border-red-200 dark:border-red-800 px-5'>
             <View className='flex-row items-center'>
               <AlertCircleIcon
                 className='text-red-600 dark:text-red-400 mr-2'
@@ -411,7 +468,7 @@ export default function Index() {
         )}
 
         {/* Header Section */}
-        <View className='mt-[60px] flex flex-row justify-between items-center'>
+        <View className='mt-[60px] flex flex-row justify-between items-center px-5'>
           <View className='flex flex-col'>
             <Text className='text-xl font-extrabold'>
               Hai, {user?.username || "User"}
@@ -421,7 +478,7 @@ export default function Index() {
             </Text>
           </View>
           <Link href={ROUTES.NOTIFICATIONS} asChild>
-            <Pressable className='bg-gray-100 dark:bg-gray-800 p-3 rounded-lg relative'>
+            <Pressable className='bg-gray-100 dark:bg-gray-800 p-3 rounded-md relative'>
               <BellIcon
                 size={16}
                 className='text-gray-400 dark:text-gray-400'
@@ -438,7 +495,7 @@ export default function Index() {
         </View>
 
         {/* Search Section */}
-        <View className='mt-6 flex flex-row justify-between items-center gap-5'>
+        <View className='mt-6 flex flex-row justify-between items-center gap-5 px-5'>
           <View className='flex-grow relative flex justify-center'>
             <SearchIcon
               size={16}
@@ -446,14 +503,18 @@ export default function Index() {
             />
             <Input
               placeholder='Search here...'
-              className='pl-10'
+              className='pl-10 shadow-md border-0 dark:bg-gray-800'
               enterKeyHint='search'
               value={searchQuery}
               onChangeText={handleSearch}
               editable={!isLoadingData}
             />
           </View>
-          <Button variant='outline' disabled={isLoadingData}>
+          <Button
+            variant='outline'
+            disabled={isLoadingData}
+            className='shadow-md border-0 dark:bg-gray-800'
+          >
             <SlidersHorizontalIcon
               size={16}
               className='text-gray-400 dark:text-gray-400'
@@ -465,54 +526,123 @@ export default function Index() {
         <View className='mt-5'>
           {/* Home Data Error */}
           {homeError ? (
-            <Card className='w-full'>
-              <CardContent className='p-6 flex items-center justify-center'>
-                <AlertCircleIcon className='text-red-500 mb-3' size={48} />
-                <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 text-center'>
-                  Oops! Something went wrong
-                </Text>
-                <Text className='text-sm text-gray-600 dark:text-gray-400 mb-4 text-center'>
-                  {homeError}
-                </Text>
-                <Button onPress={handleRetry} disabled={isLoadingData}>
-                  <RefreshCcwIcon className='text-white mr-2' size={16} />
-                  <Text className='text-white font-semibold'>Try Again</Text>
-                </Button>
-              </CardContent>
-            </Card>
+            <View className='px-5'>
+              <Card className='w-full shadow-md border-0 dark:bg-gray-800'>
+                <CardContent className='p-6 flex items-center justify-center'>
+                  <AlertCircleIcon className='text-red-500 mb-3' size={48} />
+                  <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 text-center'>
+                    Oops! Something went wrong
+                  </Text>
+                  <Text className='text-sm text-gray-600 dark:text-gray-400 mb-4 text-center'>
+                    {homeError}
+                  </Text>
+                  <Button
+                    onPress={handleRetry}
+                    disabled={isLoadingData}
+                    className='flex-row'
+                  >
+                    <RefreshCcwIcon className='text-white mr-2' size={16} />
+                    <Text className='text-white font-semibold'>Try Again</Text>
+                  </Button>
+                </CardContent>
+              </Card>
+            </View>
           ) : (
             /* Main Content */
             <>
-              {/* Promotional Banner */}
-              <Card className='w-full mb-4 bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700'>
-                <CardContent className='p-4'>
-                  <View className='flex-row items-center justify-between'>
-                    <View className='flex-1'>
-                      <Text className='text-lg font-bold text-gray-600 dark:text-blue-200 mb-1'>
-                        🎉 Special Offer!
-                      </Text>
-                      <Text className='text-sm text-gray-600 dark:text-blue-200 mb-2'>
-                        Get 30% off on premium features this month
-                      </Text>
-                      <Pressable className='bg-white/20 dark:bg-white/30 px-3 py-1 rounded-full self-start'>
-                        <Text className='text-gray-600 dark:text-blue-200 text-xs font-semibold'>
-                          Learn More
-                        </Text>
-                      </Pressable>
-                    </View>
-                    <Text className='text-4xl'>🚀</Text>
+              {/* Promotional Banner Carousel */}
+              {homeData?.promotionalItems &&
+                homeData.promotionalItems.length > 0 && (
+                  <View className='mb-2'>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      className='px-1'
+                      contentContainerStyle={{
+                        paddingHorizontal: 20,
+                        paddingBottom: 10,
+                      }}
+                    >
+                      <View className='flex-row'>
+                        {homeData.promotionalItems.map((item, index) => {
+                          // Define gradient colors based on item type
+                          const getGradientColors = (id: number) => {
+                            switch (id) {
+                              case 1:
+                                return ["#3B82F6", "#8B5CF6"]; // blue to purple
+                              case 2:
+                                return ["#10B981", "#0D9488"]; // green to teal
+                              case 3:
+                                return ["#F97316", "#DC2626"]; // orange to red
+                              case 4:
+                                return ["#8B5CF6", "#EC4899"]; // purple to pink
+                              default:
+                                return ["#6B7280", "#374151"]; // gray fallback
+                            }
+                          };
+
+                          const gradientColors = getGradientColors(item.id);
+
+                          return (
+                            <View
+                              key={item.id}
+                              className={`w-80 rounded-xl overflow-hidden ${
+                                index < homeData.promotionalItems.length - 1
+                                  ? "mr-4"
+                                  : ""
+                              }`}
+                              style={{
+                                backgroundColor: gradientColors[0],
+                                shadowColor: "#000",
+                                shadowOffset: {
+                                  width: 0,
+                                  height: 4,
+                                },
+                                shadowOpacity: 0.3,
+                                shadowRadius: 4.65,
+                                elevation: 4,
+                              }}
+                            >
+                              <View className='p-5'>
+                                <View className='flex-row items-center justify-between'>
+                                  <View className='flex-1'>
+                                    <Text className='text-lg font-bold text-white mb-1'>
+                                      {item.title}
+                                    </Text>
+                                    <Text className='text-sm text-white/90 mb-3'>
+                                      {item.description}
+                                    </Text>
+                                    <Pressable
+                                      className='px-4 py-2 rounded-full self-start'
+                                      style={{
+                                        backgroundColor:
+                                          "rgba(255, 255, 255, 0.2)",
+                                      }}
+                                    >
+                                      <Text className='text-white text-xs font-semibold'>
+                                        {item.buttonText}
+                                      </Text>
+                                    </Pressable>
+                                  </View>
+                                  <Text className='text-4xl'>{item.emoji}</Text>
+                                </View>
+                              </View>
+                            </View>
+                          );
+                        })}
+                      </View>
+                    </ScrollView>
                   </View>
-                </CardContent>
-              </Card>
+                )}
 
               {/* Quick Stats */}
               {homeData?.stats && (
-                <View className='mb-4'>
+                <View className='mb-4 px-5'>
                   <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3'>
                     Quick Stats
                   </Text>
                   <View className='flex-row justify-between gap-2'>
-                    <Card className='flex-1'>
+                    <Card className='flex-1 shadow-md border-0 dark:bg-gray-800'>
                       <CardContent className='p-3 items-center'>
                         <TrendingUpIcon
                           className='text-blue-600 dark:text-blue-400 mb-1'
@@ -526,7 +656,7 @@ export default function Index() {
                         </Text>
                       </CardContent>
                     </Card>
-                    <Card className='flex-1'>
+                    <Card className='flex-1 shadow-md border-0 dark:bg-gray-800'>
                       <CardContent className='p-3 items-center'>
                         <CheckCircleIcon
                           className='text-green-600 dark:text-green-400 mb-1'
@@ -540,7 +670,7 @@ export default function Index() {
                         </Text>
                       </CardContent>
                     </Card>
-                    <Card className='flex-1'>
+                    <Card className='flex-1 shadow-md border-0 dark:bg-gray-800'>
                       <CardContent className='p-3 items-center'>
                         <ClockIcon
                           className='text-orange-600 dark:text-orange-400 mb-1'
@@ -554,7 +684,7 @@ export default function Index() {
                         </Text>
                       </CardContent>
                     </Card>
-                    <Card className='flex-1'>
+                    <Card className='flex-1 shadow-md border-0 dark:bg-gray-800'>
                       <CardContent className='p-3 items-center'>
                         <CalendarIcon
                           className='text-purple-600 dark:text-purple-400 mb-1'
@@ -572,10 +702,10 @@ export default function Index() {
                 </View>
               )}
 
-              {/* Main Menu Grid */}
-              <View className='mb-4'>
+              {/* Quick Action Grid */}
+              <View className='mb-4 px-5'>
                 <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3'>
-                  Main Menu
+                  Quick Action
                 </Text>
                 {/* Baris Pertama - 3 Menu */}
                 <View className='flex-row justify-between gap-3 mb-3'>
@@ -584,7 +714,7 @@ export default function Index() {
                     return (
                       <Pressable
                         key={item.id}
-                        className='flex-1 bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700'
+                        className='flex-1 bg-white dark:bg-gray-800 rounded-md p-4 shadow-md border-0'
                         onPress={item.onPress}
                       >
                         <View className='items-center'>
@@ -608,7 +738,7 @@ export default function Index() {
                     return (
                       <Pressable
                         key={item.id}
-                        className='flex-1 bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700'
+                        className='flex-1 bg-white dark:bg-gray-800 rounded-md p-4 shadow-md border-0'
                         onPress={item.onPress}
                       >
                         <View className='items-center'>
@@ -629,7 +759,7 @@ export default function Index() {
 
               {/* Tasks List */}
               {homeData?.tasks && homeData.tasks.length > 0 && (
-                <View className='mb-4'>
+                <View className='mb-4 px-5'>
                   <View className='flex-row items-center justify-between mb-3'>
                     <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
                       Your Tasks
@@ -643,7 +773,7 @@ export default function Index() {
                   {homeData.tasks.slice(0, 3).map((task) => (
                     <Pressable
                       key={task.id}
-                      className={`mb-3 p-4 rounded-lg border ${getPriorityColor(
+                      className={`mb-3 p-4 rounded-md shadow-md border-0 dark:bg-gray-800 ${getPriorityColor(
                         task.priority
                       )}`}
                       onPress={() => handleTaskPress(task.id)}
@@ -689,14 +819,14 @@ export default function Index() {
               {/* Featured Content */}
               {homeData?.featuredContent &&
                 homeData.featuredContent.length > 0 && (
-                  <View className='mb-4'>
+                  <View className='mb-4 px-5'>
                     <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3'>
                       Featured Content
                     </Text>
                     {homeData.featuredContent.map((content) => (
                       <Pressable
                         key={content.id}
-                        className='mb-3 bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700'
+                        className='mb-3 bg-white dark:bg-gray-800 rounded-md p-4 shadow-md border-0'
                         onPress={() => handleFeaturedContentPress(content.id)}
                       >
                         <View className='flex-row items-center'>
@@ -728,32 +858,34 @@ export default function Index() {
 
               {/* Recent Activity */}
               {homeData?.recentActivity && (
-                <Card className='w-full mb-4'>
-                  <CardContent className='p-4'>
-                    <View className='flex-row items-center justify-between mb-3'>
-                      <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
-                        Recent Activity
-                      </Text>
-                      <StarIcon className='text-yellow-500' size={16} />
-                    </View>
-                    {homeData.recentActivity.map((activity) => (
-                      <View
-                        key={activity.id}
-                        className='flex-row items-center py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0'
-                      >
-                        <View className='w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full mr-3' />
-                        <View className='flex-1'>
-                          <Text className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-                            {activity.title}
-                          </Text>
-                          <Text className='text-xs text-gray-500 dark:text-gray-400'>
-                            {activity.time}
-                          </Text>
-                        </View>
+                <View className='px-5'>
+                  <Card className='w-full mb-4 shadow-md border-0 dark:bg-gray-800'>
+                    <CardContent className='p-4'>
+                      <View className='flex-row items-center justify-between mb-3'>
+                        <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+                          Recent Activity
+                        </Text>
+                        <StarIcon className='text-yellow-500' size={16} />
                       </View>
-                    ))}
-                  </CardContent>
-                </Card>
+                      {homeData.recentActivity.map((activity) => (
+                        <View
+                          key={activity.id}
+                          className='flex-row items-center py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0'
+                        >
+                          <View className='w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full mr-3' />
+                          <View className='flex-1'>
+                            <Text className='text-sm font-medium text-gray-900 dark:text-gray-100'>
+                              {activity.title}
+                            </Text>
+                            <Text className='text-xs text-gray-500 dark:text-gray-400'>
+                              {activity.time}
+                            </Text>
+                          </View>
+                        </View>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </View>
               )}
             </>
           )}

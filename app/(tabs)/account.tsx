@@ -72,27 +72,31 @@ export default function Account() {
    * Handle logout with confirmation
    */
   const handleLogout = () => {
-    Alert.alert("Logout", "Are you sure you want to logout from your account?", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "Logout",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            setIsLoading(true);
-            await logout();
-          } catch (error) {
-            console.error(error);
-            Alert.alert("Error", "Failed to logout. Please try again.");
-          } finally {
-            setIsLoading(false);
-          }
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to logout from your account?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
         },
-      },
-    ]);
+        {
+          text: "Logout",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              setIsLoading(true);
+              await logout();
+            } catch (error) {
+              console.error(error);
+              Alert.alert("Error", "Failed to logout. Please try again.");
+            } finally {
+              setIsLoading(false);
+            }
+          },
+        },
+      ]
+    );
   };
 
   /**
@@ -223,7 +227,7 @@ export default function Account() {
 
       {/* Profile Card */}
       <View className='px-6 mb-6'>
-        <Card className='bg-white dark:bg-gray-800'>
+        <Card className='bg-white dark:bg-gray-800 shadow-md border-0'>
           <CardContent className='p-6'>
             <View className='flex-row items-center'>
               {/* Avatar */}
@@ -271,11 +275,10 @@ export default function Account() {
           Settings
         </Text>
 
-        <Card className='bg-white dark:bg-gray-800'>
+        <Card className='bg-white dark:bg-gray-800 shadow-md border-0'>
           <CardContent className='p-0'>
             {menuItems.map((item, index) => {
               const Icon = item.icon;
-              const isLast = index === menuItems.length - 1;
 
               return (
                 <Pressable

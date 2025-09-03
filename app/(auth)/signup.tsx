@@ -15,7 +15,7 @@ import { UserPlusIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
 
 import SignupSvg from "@/assets/svg/mobile_login.svg";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "@/hooks";
 import type { RegisterCredentials } from "@/types";
 import { VALIDATION_RULES, ROUTES } from "@/constants";
@@ -170,9 +170,9 @@ export default function Signup() {
       keyboardDismissMode='interactive'
       contentContainerStyle={{ paddingBottom: insets.bottom }}
     >
-      <View className='flex min-h-full justify-center items-center gap-8 bg-neutral-50 dark:bg-gray-950'>
+      <View className='p-5 flex min-h-full justify-center items-center gap-4 bg-neutral-50 dark:bg-gray-950'>
         <SignupSvg width={200} height={200} />
-        <View className='w-full max-w-sm p-[20px] mx-auto bg-white rounded-lg shadow-md dark:bg-gray-800'>
+        <View className='w-full max-w-sm p-[20px] mx-auto bg-white rounded-md shadow-md dark:bg-gray-800'>
           <View className='flex justify-center items-center'>
             <Text className='text-2xl font-bold'>Create Account</Text>
             <Text className='text-sm text-gray-600 dark:text-gray-400 mt-2 text-center'>
@@ -182,7 +182,7 @@ export default function Signup() {
 
           {/* Global Error Message */}
           {error && (
-            <View className='mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800'>
+            <View className='mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-md border border-red-200 dark:border-red-800'>
               <Text className='text-sm text-red-600 dark:text-red-400 text-center'>
                 {error}
               </Text>

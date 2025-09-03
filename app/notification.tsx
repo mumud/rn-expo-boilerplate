@@ -199,7 +199,7 @@ export default function Notification() {
       style={{ paddingTop: insets.top }}
     >
       {/* Header */}
-      <View className='bg-white dark:bg-gray-900 px-4 py-4 border-b border-gray-200 dark:border-gray-700'>
+      <View className='dark:bg-gray-900 px-4 py-4 shadow-md'>
         <View className='flex-row items-center justify-between'>
           <View>
             <Text className='text-2xl font-bold text-gray-900 dark:text-gray-100'>
@@ -213,7 +213,7 @@ export default function Notification() {
           </View>
           <View className='flex-row gap-2'>
             <Pressable
-              className='bg-blue-500 px-3 py-2 rounded-lg'
+              className='bg-blue-500 shadow-md px-3 py-2 rounded-md dark:bg-gray-800'
               onPress={markAllAsRead}
               disabled={unreadCount === 0}
             >
@@ -225,7 +225,7 @@ export default function Notification() {
         </View>
 
         {/* Filter Tabs */}
-        <View className='flex-row mt-4 bg-gray-100 dark:bg-gray-800 rounded-lg p-1'>
+        <View className='flex-row mt-4 bg-gray-100 dark:bg-gray-800 rounded-md p-1'>
           {(["all", "unread", "read"] as const).map((filterType) => (
             <Pressable
               key={filterType}
@@ -284,11 +284,7 @@ export default function Notification() {
             {filteredNotifications.map((notification) => (
               <Pressable
                 key={notification.id}
-                className={`bg-white dark:bg-gray-900 rounded-lg p-4 border ${
-                  notification.isRead
-                    ? "border-gray-200 dark:border-gray-700"
-                    : "border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20"
-                }`}
+                className={`bg-white dark:bg-gray-900 rounded-md p-4 shadow-md`}
                 onPress={() => markAsRead(notification.id)}
               >
                 <View className='flex-row items-start gap-3'>

@@ -76,9 +76,9 @@ export default function Signin() {
       keyboardDismissMode='interactive'
       contentContainerStyle={{ paddingBottom: insets.bottom }}
     >
-      <View className='flex min-h-full justify-center items-center gap-8 bg-neutral-50 dark:bg-gray-950'>
+      <View className='px-5 flex min-h-full justify-center items-center gap-4 bg-neutral-50 dark:bg-gray-950'>
         <SigninSvg width={200} height={200} />
-        <View className='w-full max-w-sm p-[20px] mx-auto bg-white rounded-lg shadow-md dark:bg-gray-800'>
+        <View className='w-full max-w-sm p-[20px] mx-auto bg-white rounded-md shadow-md dark:bg-gray-800'>
           <View className='flex justify-center items-center'>
             <Text className='text-2xl font-bold'>Welcome</Text>
           </View>
