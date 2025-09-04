@@ -13,9 +13,7 @@ import {
   Image,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Text } from "@/components/ui/text";
+import { Button, Card, CardContent, Text } from "@/components/ui";
 import { useAuth } from "@/hooks/useAuth";
 import {
   UserIcon,

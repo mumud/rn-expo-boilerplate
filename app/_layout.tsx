@@ -1,6 +1,6 @@
 /**
  * Root Layout
- * Layout utama aplikasi dengan theme provider, auth provider, dan error boundary
+ * Main application layout with theme provider, auth provider, and error boundary
  */
 
 import "@/global.css";
@@ -19,7 +19,7 @@ import { getThemePreference, saveThemePreference } from "@/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useProtectedRoute } from "@/hooks/useProtectedRoute";
 
-// Custom Error Boundary untuk menangani error global
+// Custom Error Boundary to handle global errors
 class CustomErrorBoundary extends React.Component<
   { children: React.ReactNode },
   { hasError: boolean; error?: Error }
@@ -30,15 +30,15 @@ class CustomErrorBoundary extends React.Component<
   }
 
   static getDerivedStateFromError(error: Error) {
-    // Update state untuk menampilkan fallback UI
+    // Update state to show fallback UI
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Log error untuk debugging
+    // Log error for debugging
     console.error("Global Error Boundary caught an error:", error, errorInfo);
 
-    // Tampilkan alert untuk user
+    // Show alert to user
     Alert.alert(
       "Unexpected Error",
       "Something went wrong. The app will restart.",
@@ -55,8 +55,8 @@ class CustomErrorBoundary extends React.Component<
 
   render() {
     if (this.state.hasError) {
-      // Fallback UI bisa dikustomisasi di sini
-      return null; // Untuk sementara return null, bisa diganti dengan custom error screen
+      // Fallback UI can be customized here
+      return null; // For now return null, can be replaced with custom error screen
     }
 
     return this.props.children;
@@ -72,10 +72,10 @@ export default function RootLayout() {
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
   const [isInitialized, setIsInitialized] = React.useState(false);
 
-  // Auth state untuk protected routing
+  // Auth state for protected routing
   const { user, isLoading } = useAuth();
 
-  // Protected route logic untuk auto redirect - hanya setelah component mounted
+  // Protected route logic for auto redirect - only after component mounted
   useProtectedRoute(user, isLoading || !isColorSchemeLoaded);
 
   React.useEffect(() => {
@@ -100,8 +100,8 @@ export default function RootLayout() {
         if (!savedTheme || savedTheme === "system") {
           // Use system theme if no preference saved
           const systemTheme = colorScheme || "light";
-          await saveThemePreference("system"); // Simpan sebagai 'system'
-          setMode("system"); // Set mode sebagai 'system'
+          await saveThemePreference("system"); // Save as 'system'
+          setMode("system"); // Set mode as 'system'
           setColorScheme(systemTheme);
         } else {
           // Use saved theme preference
@@ -126,7 +126,7 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array untuk hanya run sekali saat mount
+  }, []); // Empty dependency array to only run once on mount
 
   if (!isColorSchemeLoaded) {
     return null;

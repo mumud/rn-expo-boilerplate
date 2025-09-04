@@ -14,10 +14,7 @@ import {
 } from "react-native";
 import { Link } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Text } from "@/components/ui/text";
+import { Button, Card, CardContent, Input, Text } from "@/components/ui";
 import { useAuth } from "@/hooks/useAuth";
 import {
   BellIcon,
@@ -108,10 +105,10 @@ export default function Index() {
       setIsLoadingData(true);
       setHomeError(null);
 
-      // Simulasi API call
+      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Simulasi random error untuk testing
+      // Simulate random error for testing
       if (Math.random() < 0.1) {
         throw new Error("Network error");
       }
@@ -237,8 +234,8 @@ export default function Index() {
   };
 
   /**
-   * Handle retry ketika ada error
-   */
+     * Handle retry when there's an error
+     */
   const handleRetry = () => {
     setHomeError(null);
     fetchHomeData();
@@ -250,7 +247,7 @@ export default function Index() {
    */
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    // Implementasi search logic di sini
+    // Implement search logic here
     console.log("Searching for:", query);
   };
 
@@ -471,7 +468,7 @@ export default function Index() {
         <View className='mt-[60px] flex flex-row justify-between items-center px-5'>
           <View className='flex flex-col'>
             <Text className='text-xl font-extrabold'>
-              Hai, {user?.username || "User"}
+              Hi, {user?.username || "User"}
             </Text>
             <Text className='text-gray-600 dark:text-gray-400'>
               Great to see you again
@@ -707,7 +704,7 @@ export default function Index() {
                 <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3'>
                   Quick Action
                 </Text>
-                {/* Baris Pertama - 3 Menu */}
+                {/* First Row - 3 Menus */}
                 <View className='flex-row justify-between gap-3 mb-3'>
                   {menuItems.slice(0, 3).map((item) => {
                     const IconComponent = item.icon;
@@ -731,7 +728,7 @@ export default function Index() {
                     );
                   })}
                 </View>
-                {/* Baris Kedua - 3 Menu */}
+                {/* Second Row - 3 Menus */}
                 <View className='flex-row justify-between gap-3'>
                   {menuItems.slice(3, 6).map((item) => {
                     const IconComponent = item.icon;

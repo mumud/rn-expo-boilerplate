@@ -1,12 +1,12 @@
 import { Tabs } from "expo-router";
-import { HomeIcon, User2Icon } from "lucide-react-native";
 import { Platform } from "react-native";
 import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
 import React from "react";
 import { useThemeStore } from "@/stores/themeStore";
+import { ListTodoIcon, HomeIcon, User2Icon } from "@/components/ui/icons";
 
 export default function TabLayout() {
-  // Menggunakan theme store untuk mendapatkan warna tema
+  // Use theme store to get theme colors
   const { colors, isDark } = useThemeStore();
 
   return (
@@ -67,6 +67,26 @@ export default function TabLayout() {
               exiting={FadeOutDown.duration(200)}
             >
               <HomeIcon
+                size={focused ? 22 : 20}
+                color={color}
+                strokeWidth={focused ? 2.5 : 2}
+              />
+            </Animated.View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name='task'
+        options={{
+          href: "/task",
+          headerShown: false,
+          title: "Task",
+          tabBarIcon: ({ color, focused }) => (
+            <Animated.View
+              entering={FadeInUp.duration(200)}
+              exiting={FadeOutDown.duration(200)}
+            >
+              <ListTodoIcon
                 size={focused ? 22 : 20}
                 color={color}
                 strokeWidth={focused ? 2.5 : 2}

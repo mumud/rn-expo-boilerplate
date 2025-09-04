@@ -1,15 +1,15 @@
 import React from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Pressable } from "react-native";
 import { Link, Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useThemeStore } from "@/stores";
-import { Button } from "@/components/ui";
+import { Button, Text } from "@/components/ui";
 import { HomeIcon, ArrowLeftIcon } from "@/components/ui/icons";
 
 /**
- * Komponen halaman Not Found (404)
- * Menampilkan pesan error ketika halaman tidak ditemukan
- * dengan opsi navigasi kembali ke halaman utama
+ * Not Found (404) page component
+ * Displays error message when page is not found
+ * with navigation options to return to main page
  */
 export default function NotFoundScreen() {
   const { isDark } = useThemeStore();
@@ -24,7 +24,7 @@ export default function NotFoundScreen() {
       />
 
       <View className='flex-1 justify-center items-center px-6'>
-        {/* Ilustrasi 404 */}
+        {/* 404 Illustration */}
         <View className='mb-8'>
           <Text
             className={`text-8xl font-bold ${
@@ -35,7 +35,7 @@ export default function NotFoundScreen() {
           </Text>
         </View>
 
-        {/* Icon ilustrasi */}
+        {/* Illustration Icon */}
         <View
           className={`w-32 h-32 rounded-full items-center justify-center mb-6 ${
             isDark ? "bg-gray-800" : "bg-gray-200"
@@ -44,7 +44,7 @@ export default function NotFoundScreen() {
           <Text className='text-6xl'>🔍</Text>
         </View>
 
-        {/* Pesan utama */}
+        {/* Main Message */}
         <Text
           className={`text-2xl font-bold text-center mb-4 ${
             isDark ? "text-white" : "text-gray-900"
@@ -53,7 +53,7 @@ export default function NotFoundScreen() {
           Oops! Page Not Found
         </Text>
 
-        {/* Pesan deskripsi */}
+        {/* Description Message */}
         <Text
           className={`text-base text-center mb-8 leading-6 ${
             isDark ? "text-gray-300" : "text-gray-600"
@@ -63,9 +63,9 @@ export default function NotFoundScreen() {
           you back on track!
         </Text>
 
-        {/* Tombol aksi */}
+        {/* Action Buttons */}
         <View className='w-full max-w-sm space-y-4'>
-          {/* Tombol kembali ke home */}
+          {/* Back to home button */}
           <Link href='/(tabs)' asChild>
             <Button
               className={`w-full py-4 rounded-xl flex-row items-center justify-center space-x-2 ${
@@ -81,10 +81,10 @@ export default function NotFoundScreen() {
             </Button>
           </Link>
 
-          {/* Tombol kembali */}
+          {/* Back button */}
           <Pressable
             onPress={() => {
-              // Kembali ke halaman sebelumnya jika ada
+              // Go back to previous page if available
               if (typeof window !== "undefined" && window.history.length > 1) {
                 window.history.back();
               }

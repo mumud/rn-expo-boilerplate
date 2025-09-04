@@ -14,6 +14,8 @@ import {
   Search,
   SlidersHorizontal,
   Home,
+  ListTodo,
+  User2,
 
   // Theme icons
   Sun,
@@ -43,6 +45,9 @@ import {
   RefreshCcw,
   Settings,
   CreditCard,
+  Plus,
+  Edit,
+  Trash,
 
   // Time & Calendar icons
   Calendar,
@@ -67,6 +72,8 @@ const icons = {
   Search,
   SlidersHorizontal,
   Home,
+  ListTodo,
+  User2,
 
   // Theme icons
   Sun,
@@ -96,6 +103,9 @@ const icons = {
   RefreshCcw,
   Settings,
   CreditCard,
+  Plus,
+  Edit,
+  Trash,
 
   // Time & Calendar icons
   Calendar,
@@ -123,6 +133,8 @@ export const {
   Search: SearchIcon,
   SlidersHorizontal: SlidersHorizontalIcon,
   Home: HomeIcon,
+  ListTodo: ListTodoIcon,
+  User2: User2Icon,
 
   // Theme icons
   Sun: SunIcon,
@@ -144,7 +156,7 @@ export const {
   CheckCircle: CheckCircleIcon,
   HelpCircle: HelpCircleIcon,
   Check: CheckIcon,
-  X: XMarkIcon,
+  X: XIcon,
   AlertTriangle: ExclamationTriangleIcon,
   Info: InformationCircleIcon,
 
@@ -152,6 +164,9 @@ export const {
   RefreshCcw: RefreshCcwIcon,
   Settings: SettingsIcon,
   CreditCard: CreditCardIcon,
+  Plus: PlusIcon,
+  Edit: EditIcon,
+  Trash: TrashIcon,
 
   // Time & Calendar icons
   Calendar: CalendarIcon,

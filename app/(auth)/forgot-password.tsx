@@ -7,13 +7,8 @@ import React, { useState } from "react";
 import { Pressable, View, Alert, ScrollView } from "react-native";
 import { Link } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Text } from "@/components/ui/text";
+import { Button, Input, Text, Label } from "@/components/ui";
 import { MailIcon } from "@/components/ui/icons";
-import { Label } from "@/components/ui/label";
-
 import ForgotPasswordSvg from "@/assets/svg/mobile_login.svg";
 import { useForm, useAuth } from "@/hooks";
 import { VALIDATION_RULES, ROUTES } from "@/constants";

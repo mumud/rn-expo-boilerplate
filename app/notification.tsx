@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import {
   View,
-  Text,
   ScrollView,
   Pressable,
   RefreshControl,
@@ -11,11 +10,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   BellIcon,
   CheckIcon,
-  XMarkIcon,
+  XIcon,
   ClockIcon,
   ExclamationTriangleIcon,
   InformationCircleIcon,
 } from "@/components/ui/icons";
+import { Text } from "@/components/ui";
 
 // Interface for notification
 interface INotification {
@@ -32,9 +32,9 @@ interface INotification {
 const mockNotifications: INotification[] = [
   {
     id: "1",
-    title: "Selamat Datang!",
+    title: "Welcome!",
     message:
-      "Terima kasih telah bergabung dengan aplikasi kami. Jelajahi fitur-fitur menarik yang tersedia.",
+      "Thank you for joining our application. Explore the exciting features available.",
     type: "success",
     timestamp: "2024-01-15T10:30:00Z",
     isRead: false,
@@ -42,9 +42,9 @@ const mockNotifications: INotification[] = [
   },
   {
     id: "2",
-    title: "Update Keamanan",
+    title: "Security Update",
     message:
-      "Sistem keamanan telah diperbarui. Pastikan untuk menggunakan password yang kuat.",
+      "Security system has been updated. Make sure to use a strong password.",
     type: "warning",
     timestamp: "2024-01-14T15:45:00Z",
     isRead: false,
@@ -52,8 +52,8 @@ const mockNotifications: INotification[] = [
   },
   {
     id: "3",
-    title: "Transaksi Berhasil",
-    message: "Transaksi Anda sebesar Rp 150.000 telah berhasil diproses.",
+    title: "Transaction Successful",
+    message: "Your transaction of $150.00 has been successfully processed.",
     type: "success",
     timestamp: "2024-01-14T09:20:00Z",
     isRead: true,
@@ -61,9 +61,9 @@ const mockNotifications: INotification[] = [
   },
   {
     id: "4",
-    title: "Maintenance Terjadwal",
+    title: "Scheduled Maintenance",
     message:
-      "Sistem akan menjalani maintenance pada tanggal 20 Januari 2024 pukul 02:00 - 04:00 WIB.",
+      "System will undergo maintenance on January 20, 2024 from 02:00 - 04:00 GMT.",
     type: "info",
     timestamp: "2024-01-13T16:00:00Z",
     isRead: true,
@@ -71,9 +71,9 @@ const mockNotifications: INotification[] = [
   },
   {
     id: "5",
-    title: "Login Tidak Biasa",
+    title: "Unusual Login",
     message:
-      "Terdeteksi login dari perangkat baru. Jika bukan Anda, segera ubah password.",
+      "Login detected from a new device. If it wasn't you, please change your password immediately.",
     type: "error",
     timestamp: "2024-01-12T20:15:00Z",
     isRead: false,
@@ -95,7 +95,7 @@ export default function Notification() {
   // Function to fetch notification data
   const fetchNotifications = async () => {
     try {
-      // Simulasi API call
+      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setNotifications(mockNotifications);
     } catch (error) {
@@ -173,7 +173,7 @@ export default function Notification() {
           <ExclamationTriangleIcon size={20} className='text-yellow-500' />
         );
       case "error":
-        return <XMarkIcon size={20} className='text-red-500' />;
+        return <XIcon size={20} className='text-red-500' />;
       default:
         return <InformationCircleIcon size={20} className='text-blue-500' />;
     }
@@ -190,7 +190,7 @@ export default function Notification() {
     if (diffInHours < 1) return "Just now";
     if (diffInHours < 24) return `${diffInHours} hours ago`;
     if (diffInHours < 48) return "Yesterday";
-    return date.toLocaleDateString("id-ID");
+    return date.toLocaleDateString("en-US");
   };
 
   return (
@@ -203,12 +203,12 @@ export default function Notification() {
         <View className='flex-row items-center justify-between'>
           <View>
             <Text className='text-2xl font-bold text-gray-900 dark:text-gray-100'>
-              Notifikasi
+              Notifications
             </Text>
             <Text className='text-sm text-gray-600 dark:text-gray-400'>
               {unreadCount > 0
-                ? `${unreadCount} notifikasi belum dibaca`
-                : "Semua notifikasi sudah dibaca"}
+                ? `${unreadCount} unread notifications`
+                : "All notifications have been read"}
             </Text>
           </View>
           <View className='flex-row gap-2'>
@@ -218,7 +218,7 @@ export default function Notification() {
               disabled={unreadCount === 0}
             >
               <Text className='text-white text-xs font-medium'>
-                Tandai Semua
+                Mark All as Read
               </Text>
             </Pressable>
           </View>
@@ -244,10 +244,10 @@ export default function Notification() {
                 }`}
               >
                 {filterType === "all"
-                  ? "Semua"
+                  ? "All"
                   : filterType === "unread"
-                  ? "Belum Dibaca"
-                  : "Sudah Dibaca"}
+                  ? "Unread"
+                  : "Read"}
               </Text>
             </Pressable>
           ))}
@@ -269,14 +269,14 @@ export default function Notification() {
               className='text-gray-400 dark:text-gray-600 mb-4'
             />
             <Text className='text-lg font-medium text-gray-900 dark:text-gray-100 mb-2'>
-              Tidak ada notifikasi
+              No notifications
             </Text>
             <Text className='text-gray-600 dark:text-gray-400 text-center'>
               {filter === "unread"
-                ? "Semua notifikasi sudah dibaca"
+                ? "All notifications have been read"
                 : filter === "read"
-                ? "Belum ada notifikasi yang dibaca"
-                : "Belum ada notifikasi untuk ditampilkan"}
+                ? "No notifications have been read yet"
+                : "No notifications to display"}
             </Text>
           </View>
         ) : (
@@ -326,7 +326,7 @@ export default function Notification() {
                         className='p-1'
                         onPress={() => deleteNotification(notification.id)}
                       >
-                        <XMarkIcon size={16} className='text-gray-400' />
+                        <XIcon size={16} className='text-gray-400' />
                       </Pressable>
                     </View>
                   </View>

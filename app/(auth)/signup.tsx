@@ -1,19 +1,14 @@
 /**
  * Signup Screen
- * Halaman registrasi dengan form validation dan error handling
+ * Registration page with form validation and error handling
  */
 
 import React, { useState } from "react";
 import { Pressable, View, Alert, ScrollView } from "react-native";
 import { Link } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Text } from "@/components/ui/text";
+import { Button, Input, Text, Label } from "@/components/ui";
 import { UserPlusIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icons";
-import { Label } from "@/components/ui/label";
-
 import SignupSvg from "@/assets/svg/mobile_login.svg";
 import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "@/hooks";
@@ -29,7 +24,7 @@ export default function Signup() {
   });
 
   /**
-   * Form configuration dengan validation rules
+   * Form configuration with validation rules
    */
   const {
     values,
@@ -76,7 +71,7 @@ export default function Signup() {
           required: true,
           custom: (value: string) => {
             if (value !== values.password) {
-              return "Password dan konfirmasi password tidak sama";
+              return "Password and confirm password do not match";
             }
             return null;
           },
@@ -114,23 +109,23 @@ export default function Signup() {
         const success = await register(credentials);
 
         if (!success) {
-          // Error akan ditampilkan dari auth context
+          // Error will be displayed from auth context
           console.log("Registration failed");
         }
       } catch (err) {
         console.error("Registration error:", err);
         Alert.alert(
           "Error",
-          "Terjadi kesalahan saat registrasi. Silakan coba lagi."
+          "An error occurred during registration. Please try again."
         );
       }
     },
   });
 
   /**
-   * Handle perubahan nilai input
-   * @param field - Nama field
-   * @param value - Nilai baru
+   * Handle input value changes
+   * @param field - Field name
+   * @param value - New value
    */
   const onChange = (field: keyof RegisterCredentials, value: string) => {
     handleChange(field, value);
@@ -138,7 +133,7 @@ export default function Signup() {
 
   /**
    * Handle blur event
-   * @param field - Nama field
+   * @param field - Field name
    */
   const onBlur = (field: keyof RegisterCredentials) => {
     handleBlur(field);
@@ -146,7 +141,7 @@ export default function Signup() {
 
   /**
    * Toggle password visibility
-   * @param field - Field password yang akan di-toggle
+   * @param field - Password field to toggle
    */
   const toggleSecureTextEntry = (field: "password" | "confirmPassword") => {
     setSecureTextEntry((prev) => ({
@@ -156,9 +151,9 @@ export default function Signup() {
   };
 
   /**
-   * Get error message untuk field tertentu
-   * @param field - Nama field
-   * @returns Error message atau null
+   * Get error message for specific field
+   * @param field - Field name
+   * @returns Error message or null
    */
   const getFieldError = (field: keyof RegisterCredentials): string | null => {
     return touched[field] && errors[field] ? errors[field] : null;

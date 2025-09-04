@@ -2,13 +2,8 @@ import React, { useState } from "react";
 import { Pressable, View, ScrollView } from "react-native";
 import { Link } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Text } from "@/components/ui/text";
+import { Button, Input, Text, Label } from "@/components/ui";
 import { LogInIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icons";
-import { Label } from "@/components/ui/label";
-
 import SigninSvg from "@/assets/svg/mobile_login.svg";
 import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "@/hooks";
