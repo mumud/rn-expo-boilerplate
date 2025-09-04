@@ -202,8 +202,8 @@ export default function TaskListScreen() {
   };
 
   /**
-     * Delete task
-     */
+   * Delete task
+   */
   const deleteTask = (taskId: number) => {
     Alert.alert("Delete Task", "Are you sure you want to delete this task?", [
       { text: "Cancel", style: "cancel" },
@@ -308,14 +308,12 @@ export default function TaskListScreen() {
         <View className='mt-[60px] flex flex-row justify-between items-center px-5'>
           <View className='flex flex-col'>
             <Text className='text-xl font-extrabold'>Task List</Text>
-          <Text className='text-sm text-gray-600 dark:text-gray-400'>
-            Manage your tasks efficiently
-          </Text>
+            <Text className='text-sm text-gray-600 dark:text-gray-400'>
+              Manage your tasks efficiently
+            </Text>
           </View>
           <Pressable
-            onPress={() =>
-              Alert.alert("Add Task", "Feature coming soon")
-            }
+            onPress={() => Alert.alert("Add Task", "Feature coming soon")}
             className='bg-blue-500 p-3 rounded-md'
           >
             <PlusIcon size={16} className='text-white' />
@@ -333,24 +331,25 @@ export default function TaskListScreen() {
               placeholder='Search tasks...'
               value={searchQuery}
               onChangeText={setSearchQuery}
-              className='pl-10 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+              className='pl-10 shadow-md border-0 dark:bg-gray-800'
             />
           </View>
-          <Pressable
+          <Button
+            variant='outline'
+            className='shadow-md border-0 dark:bg-gray-800'
             onPress={() => setShowFilterModal(true)}
-            className='bg-white dark:bg-gray-800 p-3 rounded-md border border-gray-200 dark:border-gray-700'
           >
             <SlidersHorizontalIcon
               size={16}
-              className='text-gray-600 dark:text-gray-400'
+              className='text-gray-400 dark:text-gray-400'
             />
-          </Pressable>
+          </Button>
         </View>
 
         {/* Task Statistics */}
         <View className='mt-6 px-5'>
           <View className='flex flex-row justify-between gap-3'>
-            <View className='flex-1 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700'>
+            <View className='flex-1 bg-white dark:bg-gray-800 p-4 rounded-md shadow-md border-0'>
               <Text className='text-2xl font-bold text-blue-600 dark:text-blue-400'>
                 {tasks.length}
               </Text>
@@ -358,7 +357,7 @@ export default function TaskListScreen() {
                 Total Tasks
               </Text>
             </View>
-            <View className='flex-1 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700'>
+            <View className='flex-1 bg-white dark:bg-gray-800 p-4 rounded-md shadow-md border-0'>
               <Text className='text-2xl font-bold text-green-600 dark:text-green-400'>
                 {tasks.filter((task) => task.status === "completed").length}
               </Text>
@@ -366,7 +365,7 @@ export default function TaskListScreen() {
                 Selesai
               </Text>
             </View>
-            <View className='flex-1 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700'>
+            <View className='flex-1 bg-white dark:bg-gray-800 p-4 rounded-md shadow-md border-0'>
               <Text className='text-2xl font-bold text-orange-600 dark:text-orange-400'>
                 {tasks.filter((task) => task.status === "pending").length}
               </Text>
@@ -384,7 +383,7 @@ export default function TaskListScreen() {
           </Text>
 
           {filteredTasks.length === 0 ? (
-            <View className='bg-white dark:bg-gray-800 p-8 rounded-lg border border-gray-200 dark:border-gray-700 items-center'>
+            <View className='bg-white dark:bg-gray-800 p-8 rounded-md shadow-md border-0 items-center'>
               <AlertCircleIcon
                 size={48}
                 className='text-gray-400 dark:text-gray-500 mb-4'
@@ -395,7 +394,7 @@ export default function TaskListScreen() {
                 filter.priority !== "all" ||
                 filter.category !== "all"
                   ? "No tasks match the current filter"
-              : "No tasks available"}
+                  : "No tasks available"}
               </Text>
             </View>
           ) : (
@@ -404,7 +403,7 @@ export default function TaskListScreen() {
               return (
                 <Card
                   key={task.id}
-                  className='mb-4 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+                  className='mb-4 bg-white dark:bg-gray-800 rounded-md shadow-md border-0'
                 >
                   <CardContent className='p-4'>
                     <View className='flex flex-row justify-between items-start mb-3'>
