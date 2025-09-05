@@ -13,7 +13,7 @@ import {
   XIcon,
   ClockIcon,
   ExclamationTriangleIcon,
-  InformationCircleIcon,
+  InfoIcon,
 } from "@/components/ui/icons";
 import { Text, EmptyState } from "@/components/ui";
 
@@ -175,7 +175,7 @@ export default function Notification() {
       case "error":
         return <XIcon size={20} className='text-red-500' />;
       default:
-        return <InformationCircleIcon size={20} className='text-blue-500' />;
+        return <InfoIcon size={20} className='text-blue-500' />;
     }
   };
 

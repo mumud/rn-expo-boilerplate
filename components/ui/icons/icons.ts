@@ -49,6 +49,8 @@ import {
   Plus,
   Edit,
   Trash,
+  ChevronDown,
+  ChevronUp,
 
   // Time & Calendar icons
   Calendar,
@@ -108,6 +110,8 @@ const icons = {
   Plus,
   Edit,
   Trash,
+  ChevronDown,
+  ChevronUp,
 
   // Time & Calendar icons
   Calendar,
@@ -161,7 +165,7 @@ export const {
   Check: CheckIcon,
   X: XIcon,
   AlertTriangle: ExclamationTriangleIcon,
-  Info: InformationCircleIcon,
+  Info: InfoIcon,
 
   // Action icons
   RefreshCcw: RefreshCcwIcon,
@@ -170,6 +174,8 @@ export const {
   Plus: PlusIcon,
   Edit: EditIcon,
   Trash: TrashIcon,
+  ChevronDown: ChevronDownIcon,
+  ChevronUp: ChevronUpIcon,
 
   // Time & Calendar icons
   Calendar: CalendarIcon,
