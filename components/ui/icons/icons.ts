@@ -1,6 +1,6 @@
 /**
  * Icons collection - Centralized icon management
- * Menggunakan pendekatan yang lebih clean dengan satu file untuk semua ikon
+ * Using a cleaner approach with one file for all icons
  */
 
 import {
@@ -16,6 +16,7 @@ import {
   Home,
   ListTodo,
   User2,
+  List,
 
   // Theme icons
   Sun,
@@ -74,6 +75,7 @@ const icons = {
   Home,
   ListTodo,
   User2,
+  List,
 
   // Theme icons
   Sun,
@@ -135,6 +137,7 @@ export const {
   Home: HomeIcon,
   ListTodo: ListTodoIcon,
   User2: User2Icon,
+  List: ListIcon,
 
   // Theme icons
   Sun: SunIcon,
@@ -180,8 +183,8 @@ export const {
 // Export all icons as default for easy access
 export default icons;
 
-// Type untuk icon names
+// Type for icon names
 export type IconName = keyof typeof icons;
 
-// Helper function untuk mendapatkan icon berdasarkan nama
+// Helper function to get icon by name
 export const getIcon = (name: IconName) => icons[name];

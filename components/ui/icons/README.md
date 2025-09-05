@@ -2,37 +2,37 @@
 
 ## 🎯 Overview
 
-Struktur ikon ini telah dioptimasi untuk memberikan pengalaman developer yang lebih clean dan maintainable. Berikut adalah pendekatan yang digunakan:
+This icon structure has been optimized to provide a cleaner and more maintainable developer experience. Here is the approach used:
 
 ## 📁 Structure
 
 ```
 icons/
 ├── icons.ts          # Centralized icon management (NEW)
-├── index.tsx         # Barrel export dengan backward compatibility
-├── iconWithClassName.ts # Utility untuk NativeWind support
+├── index.tsx         # Barrel export with backward compatibility
+├── iconWithClassName.ts # Utility for NativeWind support
 └── README.md         # Documentation
 ```
 
 ## ✨ Benefits
 
 ### 1. **Centralized Management**
-- Semua ikon dikelola dalam satu file (`icons.ts`)
-- Mudah untuk menambah/menghapus ikon
-- Konsistensi naming convention
+- All icons managed in one file (`icons.ts`)
+- Easy to add/remove icons
+- Consistent naming convention
 
 ### 2. **Reduced Boilerplate**
-- Tidak perlu membuat file terpisah untuk setiap ikon
-- Otomatis apply `iconWithClassName` ke semua ikon
-- Grouping berdasarkan kategori untuk kemudahan
+- No need to create separate files for each icon
+- Automatically apply `iconWithClassName` to all icons
+- Grouping based on categories for convenience
 
 ### 3. **Type Safety**
-- Export `IconName` type untuk autocomplete
-- Helper function `getIcon()` dengan type safety
+- Export `IconName` type for autocomplete
+- Helper function `getIcon()` with type safety
 
 ### 4. **Backward Compatibility**
-- Import yang sudah ada tetap berfungsi
-- Gradual migration tanpa breaking changes
+- Existing imports still work
+- Gradual migration without breaking changes
 
 ## 🚀 Usage
 
@@ -85,7 +85,7 @@ export const {
 
 ### From Old Structure
 ```tsx
-// Old way (masih berfungsi)
+// Old way (still works)
 import { UserIcon } from '@/components/ui/icons/UserIcon';
 
 // New way (recommended)
@@ -93,17 +93,17 @@ import { UserIcon } from '@/components/ui/icons';
 ```
 
 ### Cleanup Old Files
-Setelah yakin semua import sudah menggunakan cara baru, file-file individual ikon bisa dihapus:
+After ensuring all imports are using the new way, individual icon files can be deleted:
 - `UserIcon.tsx`
 - `BellIcon.tsx`
 - dll.
 
 ## 📝 Best Practices
 
-1. **Consistent Naming**: Gunakan format `[Name]Icon` untuk semua ikon
-2. **Categorization**: Group ikon berdasarkan fungsi/kategori
-3. **Documentation**: Tambahkan comment untuk kategori baru
-4. **Type Safety**: Selalu gunakan `IconName` type untuk dynamic usage
+1. **Consistent Naming**: Use `[Name]Icon` format for all icons
+2. **Categorization**: Group icons based on function/category
+3. **Documentation**: Add comments for new categories
+4. **Type Safety**: Always use `IconName` type for dynamic usage
 
 ## 🎨 Icon Categories
 
@@ -120,8 +120,8 @@ Setelah yakin semua import sudah menggunakan cara baru, file-file individual iko
 
 ## 🔧 Maintenance
 
-- Untuk menambah ikon baru, edit hanya file `icons.ts`
-- Untuk menghapus ikon, hapus dari `icons.ts` dan update exports
-- Untuk rename, update di bagian exports dengan alias
+- To add new icons, edit only the `icons.ts` file
+- To remove icons, delete from `icons.ts` and update exports
+- To rename, update in the exports section with alias
 
-Struktur ini memberikan balance antara simplicity, maintainability, dan backward compatibility! 🚀
+This structure provides a balance between simplicity, maintainability, and backward compatibility! 🚀

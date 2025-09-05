@@ -14,7 +14,7 @@ import {
   Modal,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button, Card, CardContent, Input, Text } from "@/components/ui";
+import { Button, Card, CardContent, Input, Text, EmptyState } from "@/components/ui";
 import {
   SearchIcon,
   SlidersHorizontalIcon,
@@ -383,20 +383,19 @@ export default function TaskListScreen() {
           </Text>
 
           {filteredTasks.length === 0 ? (
-            <View className='p-8 items-center'>
-              <AlertCircleIcon
-                size={48}
-                className='text-gray-400 dark:text-gray-500 mb-4'
-              />
-              <Text className='text-gray-600 dark:text-gray-400 text-center'>
-                {searchQuery ||
+            <EmptyState
+              icon={AlertCircleIcon}
+              title="No tasks found"
+              description={
+                searchQuery ||
                 filter.status !== "all" ||
                 filter.priority !== "all" ||
                 filter.category !== "all"
                   ? "No tasks match the current filter"
-                  : "No tasks available"}
-              </Text>
-            </View>
+                  : "No tasks available"
+              }
+              className="p-8 items-center"
+            />
           ) : (
             filteredTasks.map((task) => {
               const StatusIcon = getStatusIcon(task.status);

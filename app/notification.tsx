@@ -15,7 +15,7 @@ import {
   ExclamationTriangleIcon,
   InformationCircleIcon,
 } from "@/components/ui/icons";
-import { Text } from "@/components/ui";
+import { Text, EmptyState } from "@/components/ui";
 
 // Interface for notification
 interface INotification {
@@ -263,22 +263,17 @@ export default function Notification() {
         showsVerticalScrollIndicator={false}
       >
         {filteredNotifications.length === 0 ? (
-          <View className='flex-1 items-center justify-center py-20'>
-            <BellIcon
-              size={48}
-              className='text-gray-400 dark:text-gray-600 mb-4'
-            />
-            <Text className='text-lg font-medium text-gray-900 dark:text-gray-100 mb-2'>
-              No notifications
-            </Text>
-            <Text className='text-gray-600 dark:text-gray-400 text-center'>
-              {filter === "unread"
+          <EmptyState
+            icon={BellIcon}
+            title='No notifications'
+            description={
+              filter === "unread"
                 ? "All notifications have been read"
                 : filter === "read"
                 ? "No notifications have been read yet"
-                : "No notifications to display"}
-            </Text>
-          </View>
+                : "No notifications to display"
+            }
+          />
         ) : (
           <View className='p-4 gap-3'>
             {filteredNotifications.map((notification) => (

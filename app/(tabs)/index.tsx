@@ -14,14 +14,20 @@ import {
 } from "react-native";
 import { Link } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button, Card, CardContent, Input, Text } from "@/components/ui";
+import {
+  Button,
+  Card,
+  CardContent,
+  Input,
+  Text,
+  ErrorState,
+  ErrorBanner,
+} from "@/components/ui";
 import { useAuth } from "@/hooks/useAuth";
 import {
   BellIcon,
   SearchIcon,
   SlidersHorizontalIcon,
-  AlertCircleIcon,
-  RefreshCcwIcon,
   UserIcon,
   CreditCardIcon,
   SettingsIcon,
@@ -450,19 +456,7 @@ export default function Index() {
     >
       <View className='min-h-full bg-neutral-50 dark:bg-gray-950'>
         {/* Auth Error Banner */}
-        {error && (
-          <View className='mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-md border border-red-200 dark:border-red-800 px-5'>
-            <View className='flex-row items-center'>
-              <AlertCircleIcon
-                className='text-red-600 dark:text-red-400 mr-2'
-                size={16}
-              />
-              <Text className='text-sm text-red-600 dark:text-red-400 flex-1'>
-                {error}
-              </Text>
-            </View>
-          </View>
-        )}
+        {error && <ErrorBanner message={error} variant='error' />}
 
         {/* Header Section */}
         <View className='mt-[60px] flex flex-row justify-between items-center px-5'>
@@ -524,20 +518,12 @@ export default function Index() {
           {/* Home Data Error */}
           {homeError ? (
             <View className='px-5'>
-              <View className='p-8 items-center'>
-                <AlertCircleIcon className='text-red-500 mb-3' size={48} />
-                <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 text-center'>
-                  Oops! Something went wrong
-                </Text>
-                <Button
-                  onPress={handleRetry}
-                  disabled={isLoadingData}
-                  className='flex-row'
-                >
-                  <RefreshCcwIcon className='text-white mr-2' size={16} />
-                  <Text className='text-white font-semibold'>Try Again</Text>
-                </Button>
-              </View>
+              <ErrorState
+                message='Oops! Something went wrong'
+                onRetry={handleRetry}
+                retryText='Try Again'
+                isLoading={isLoadingData}
+              />
             </View>
           ) : (
             /* Main Content */

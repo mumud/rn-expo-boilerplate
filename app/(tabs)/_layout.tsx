@@ -3,7 +3,12 @@ import { Platform } from "react-native";
 import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
 import React from "react";
 import { useThemeStore } from "@/stores/themeStore";
-import { ListTodoIcon, HomeIcon, User2Icon } from "@/components/ui/icons";
+import {
+  ListTodoIcon,
+  HomeIcon,
+  User2Icon,
+  ListIcon,
+} from "@/components/ui/icons";
 
 export default function TabLayout() {
   // Use theme store to get theme colors
@@ -87,6 +92,26 @@ export default function TabLayout() {
               exiting={FadeOutDown.duration(200)}
             >
               <ListTodoIcon
+                size={focused ? 22 : 20}
+                color={color}
+                strokeWidth={focused ? 2.5 : 2}
+              />
+            </Animated.View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name='example'
+        options={{
+          href: "/example",
+          headerShown: false,
+          title: "Example",
+          tabBarIcon: ({ color, focused }) => (
+            <Animated.View
+              entering={FadeInUp.duration(200)}
+              exiting={FadeOutDown.duration(200)}
+            >
+              <ListIcon
                 size={focused ? 22 : 20}
                 color={color}
                 strokeWidth={focused ? 2.5 : 2}

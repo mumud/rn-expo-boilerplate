@@ -1,6 +1,6 @@
 /**
  * Example Usage - Icons Structure
- * Contoh penggunaan struktur ikon yang baru
+ * Example usage of the new icon structure
  */
 
 import React from "react";

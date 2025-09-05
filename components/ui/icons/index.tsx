@@ -1,6 +1,6 @@
 /**
  * Icons barrel export - Clean & Centralized approach
- * Export semua icon components dari satu file untuk kemudahan maintenance
+ * Export all icon components from one file for easier maintenance
  */
 
 // Export all icons from the centralized icons file

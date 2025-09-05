@@ -1,12 +1,12 @@
 /**
  * Components barrel export
- * Export semua components untuk memudahkan import
+ * Export all components for easier import
  */
 
 // UI Components
 export * from './ui';
 
-// Custom components bisa ditambahkan di sini
+// Custom components can be added here
 // export * from './custom';
 // export * from './forms';
 // export * from './layout';
