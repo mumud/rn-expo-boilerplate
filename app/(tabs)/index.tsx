@@ -234,8 +234,8 @@ export default function Index() {
   };
 
   /**
-     * Handle retry when there's an error
-     */
+   * Handle retry when there's an error
+   */
   const handleRetry = () => {
     setHomeError(null);
     fetchHomeData();
@@ -524,25 +524,20 @@ export default function Index() {
           {/* Home Data Error */}
           {homeError ? (
             <View className='px-5'>
-              <Card className='w-full shadow-md border-0 dark:bg-gray-800'>
-                <CardContent className='p-6 flex items-center justify-center'>
-                  <AlertCircleIcon className='text-red-500 mb-3' size={48} />
-                  <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 text-center'>
-                    Oops! Something went wrong
-                  </Text>
-                  <Text className='text-sm text-gray-600 dark:text-gray-400 mb-4 text-center'>
-                    {homeError}
-                  </Text>
-                  <Button
-                    onPress={handleRetry}
-                    disabled={isLoadingData}
-                    className='flex-row'
-                  >
-                    <RefreshCcwIcon className='text-white mr-2' size={16} />
-                    <Text className='text-white font-semibold'>Try Again</Text>
-                  </Button>
-                </CardContent>
-              </Card>
+              <View className='p-8 items-center'>
+                <AlertCircleIcon className='text-red-500 mb-3' size={48} />
+                <Text className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 text-center'>
+                  Oops! Something went wrong
+                </Text>
+                <Button
+                  onPress={handleRetry}
+                  disabled={isLoadingData}
+                  className='flex-row'
+                >
+                  <RefreshCcwIcon className='text-white mr-2' size={16} />
+                  <Text className='text-white font-semibold'>Try Again</Text>
+                </Button>
+              </View>
             </View>
           ) : (
             /* Main Content */
@@ -711,7 +706,7 @@ export default function Index() {
                     return (
                       <Pressable
                         key={item.id}
-                        className='flex-1 bg-white dark:bg-gray-800 rounded-md p-4 shadow-md border-0'
+                        className='flex-1 bg-white dark:bg-gray-800 rounded-md p-2 shadow-md border-0'
                         onPress={item.onPress}
                       >
                         <View className='items-center'>

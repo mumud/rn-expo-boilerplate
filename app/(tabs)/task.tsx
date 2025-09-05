@@ -159,7 +159,6 @@ export default function TaskListScreen() {
   /**
    * Filter and search tasks
    */
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const filterTasks = () => {
     let filtered = tasks;
 
@@ -275,7 +274,8 @@ export default function TaskListScreen() {
   // Filter tasks when there are changes
   useEffect(() => {
     filterTasks();
-  }, [tasks, searchQuery, filter, filterTasks]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tasks, searchQuery, filter]);
 
   // Loading state
   if (isLoading && tasks.length === 0) {
@@ -383,7 +383,7 @@ export default function TaskListScreen() {
           </Text>
 
           {filteredTasks.length === 0 ? (
-            <View className='bg-white dark:bg-gray-800 p-8 rounded-md shadow-md border-0 items-center'>
+            <View className='p-8 items-center'>
               <AlertCircleIcon
                 size={48}
                 className='text-gray-400 dark:text-gray-500 mb-4'
